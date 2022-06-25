@@ -8,5 +8,4 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def mover(self, posicao):
-        self.rect.x = posicao[0]
-        self.rect.y = posicao[1]
+        self.rect.center = posicao 

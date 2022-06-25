@@ -91,11 +91,10 @@ while True:
     #Movimentação do jogador
     v_movimento = movimento()
     playerrect = playerrect.move(v_movimento)
-    player.mover(v_movimento)
     #Detecção de Colisão
     v_movimento = detectar_col()
     playerrect = playerrect.move(v_movimento)
-    player.mover(v_movimento)
+    player.mover(playerrect.center)
     
     #Renderização
     tela.fill(branco)
