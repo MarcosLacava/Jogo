@@ -19,7 +19,7 @@ tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
 #Criação do player
-player = Player()
+player = Player() 
 playerrect = player.rect
 playerrect.center = (150, 700)
 lista_sprites.add(player)
