@@ -9,3 +9,6 @@ class Player(pygame.sprite.Sprite):
 
     def mover(self, posicao):
         self.rect.center = posicao 
+        #fasdkopjfopas
+    def fodr():
+        pass
