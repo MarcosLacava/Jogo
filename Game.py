@@ -7,22 +7,25 @@ from Mapa import Mapa
 
 pygame.init()
 
-#Fonte padrão do sistema
+# Game Clock
+clock = pygame.time.Clock()
+
+# Fonte padrão do sistema
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 12) 
 
 preto = 0, 0, 0
 branco = 255, 255, 255
 
-#Cria a tela e lista de sprites
+# Cria a tela e lista de sprites
 size = width, height = 1000, 1000
 tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
-#Criação do player
+# Criação do player
 player = Player() 
 lista_sprites.add(player)
 
-#Criação do Mapa
+# Criação do Mapa
 mapa = Mapa()
 
 
@@ -56,5 +59,5 @@ while True:
 
     lista_sprites.draw(tela)
 
-    pygame.display.flip()
-    pygame.time.delay(10)
+    pygame.display.update()
+    clock.tick(60)
