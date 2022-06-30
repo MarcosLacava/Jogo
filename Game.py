@@ -7,18 +7,21 @@ from Mapa import Mapa
 
 pygame.init()
 
-#Fonte padrão do sistema
+# Game Clock
+clock = pygame.time.Clock()
+
+# Fonte padrão do sistema
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 12) 
 
 preto = 0, 0, 0
 branco = 255, 255, 255
 
-#Cria a tela e lista de sprites
+# Cria a tela e lista de sprites
 size = width, height = 1000, 1000
 tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
-#Criação do player
+# Criação do player
 player = Player() 
 lista_sprites.add(player)
 
@@ -35,23 +38,8 @@ mapa = Mapa([
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
        ])
-
-
-'''
-def detectar_col():
-    col = playerrect.collidelist(colisores)
-    mover = pygame.Vector2()
-
-    #Caso haja uma colisão
-    if col != -1:
-        colrect = colisores[col]
-        mover = (min(colrect.right - playerrect.left, colrect.left - playerrect.right), min(colrect.top - playerrect.bottom, colrect.bottom - playerrect.top))
-        if abs(mover[0]) < abs(mover[1]):
-            mover = (mover[0], 0)
-        else:
-            mover = (0, mover[1])
-    return mover
-'''
+# Criação do Mapa
+mapa = Mapa()
 
 while True:
     #Eventos
@@ -67,5 +55,5 @@ while True:
 
     lista_sprites.draw(tela)
 
-    pygame.display.flip()
-    pygame.time.delay(10)
+    pygame.display.update()
+    clock.tick(60)
