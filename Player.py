@@ -28,12 +28,11 @@ class Player(pygame.sprite.Sprite):
         movimento = pygame.Vector2()
 
         if self.dir != (0,0):
-            movimento += (self.dir[0] * self.tileLen/30, self.dir[1]*self.tileLen/(30/self.velocidade))
-            self.mov_count += 1
-            if self.mov_count >= 30/self.velocidade:
+            movimento += (self.dir[0]*self.velocidade, self.dir[1]*self.velocidade)
+            if abs(self.rect.topleft[0] - self.pos[1]*self.tileLen) <= 1 and abs(self.rect.topleft[1] - self.pos[0]*self.tileLen) <= 1:
+                self.rect.topleft = (self.pos[1]*self.tileLen, self.pos[0]*self.tileLen)    
                 self.dir = (0,0)
-                self.mov_count = 0
-                self.input()
+                self.input()       
         else:
             self.input()
         return movimento
@@ -43,13 +42,15 @@ class Player(pygame.sprite.Sprite):
         if teclas[pygame.K_w] and self.pos[0] != 0 and self.mapa[self.pos[0]-1][self.pos[1]] == 0:
             self.dir = (0,-1)
             self.pos = (self.pos[0]-1, self.pos[1])
-        elif teclas[pygame.K_s] and self.pos[0] != len(self.mapa) and self.mapa[self.pos[0]+1][self.pos[1]] == 0:    
+        elif teclas[pygame.K_s] and self.pos[0] != len(self.mapa)-1 and self.mapa[self.pos[0]+1][self.pos[1]] == 0:    
             self.dir = (0,1)
             self.pos = (self.pos[0]+1, self.pos[1])
-        elif teclas[pygame.K_a] and self.pos[0] != 0 and self.mapa[self.pos[0]-1][self.pos[1]] == 0:      
-            movimento += (-1 * self.velocidade, 0)
-        elif teclas[pygame.K_d] and self.pos[0] != 0 and self.mapa[self.pos[0]-1][self.pos[1]] == 0: 
-            movimento += (1 * self.velocidade, 0)
+        elif teclas[pygame.K_a] and self.pos[1] != 0 and self.mapa[self.pos[0]][self.pos[1]-1] == 0:      
+            self.dir = (-1,0)
+            self.pos = (self.pos[0], self.pos[1]-1)
+        elif teclas[pygame.K_d] and self.pos[1] != len(self.mapa[0])-1 and self.mapa[self.pos[0]][self.pos[1]+1] == 0: 
+            self.dir = (1,0)
+            self.pos = (self.pos[0], self.pos[1]+1)
 
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()
