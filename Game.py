@@ -21,12 +21,8 @@ size = width, height = 1000, 1000
 tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
-# Criação do player
-player = Player() 
-lista_sprites.add(player)
-
 #Criação do Mapa
-mapa = Mapa([
+matriz_colisao = [
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
         [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
@@ -37,9 +33,24 @@ mapa = Mapa([
         [1, 0, 0, 0, 0, 0, 1, 1, 0, 1], 
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+       ]
+
+mapa = Mapa([
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+        [1, 2, 2, 2, 0, 0, 2, 2, 2, 1], 
+        [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 2, 0, 0, 0, 3, 0, 0, 1], 
+        [2, 0, 0, 0, 0, 3, 2, 0, 0, 2], 
+        [0, 0, 0, 0, 3, 2, 0, 0, 0, 0], 
+        [3, 0, 0, 3, 2, 0, 3, 3, 0, 3], 
+        [1, 0, 0, 2, 0, 0, 1, 1, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 2, 2, 0, 1], 
+        [1, 3, 3, 3, 0, 0, 3, 3, 3, 1], 
        ])
-# Criação do Mapa
-mapa = Mapa()
+
+# Criação do player
+player = Player(matriz_colisao, (3,1), mapa.tileLen)
+lista_sprites.add(player)
 
 while True:
     #Eventos
