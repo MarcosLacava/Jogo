@@ -22,6 +22,7 @@ tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
 #Criação do Mapa
+
 matriz_colisao = [
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 

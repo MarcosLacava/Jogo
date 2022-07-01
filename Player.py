@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, mapa, pos_inicial, tileLen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("sprite_FRACH00.png").convert()
+        self.image = pygame.image.load("sprite_FRACH00.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.pos = pos_inicial
         self.dir = (0, 0)
