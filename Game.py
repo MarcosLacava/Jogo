@@ -57,7 +57,7 @@ while True:
     #Eventos
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
-    
+        
     player.update()
 
     #Renderização
@@ -68,4 +68,4 @@ while True:
     lista_sprites.draw(tela)
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(30)
