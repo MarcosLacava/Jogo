@@ -1,19 +1,19 @@
-from cmath import rect
-from msilib import sequence
-import sys, pygame
-from turtle import pos
-from telnetlib import GA
+import os
+import pygame
+import json
 from typing import Any
 
 class Player(pygame.sprite.Sprite):
+    
     playerrect = pygame.Rect
     velocidade = 7
 
-    def __init__(self, mapa, pos_inicial, tileLen):
-        # Inicialização do Player
+    def __init__(self, mapa, pos_inicial, tileLen, sprites):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("sprite_FRACH00.png").convert_alpha()
-        self.rect = self.image.get_rect()
+        # Inicialização do Player
+        self.sprites = sprites
+        self.image = sprites[0]
+        self.rect = self.sprites[0].get_rect()
         self.pos = pos_inicial
         self.dir = (0, 0)
         self.tileLen = tileLen
@@ -60,3 +60,5 @@ class Player(pygame.sprite.Sprite):
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()
         return super().update(*args, **kwargs)
+
+    
