@@ -22,8 +22,7 @@ tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
 #Criação do Mapa
-
-matriz_colisao = [
+matriz_mapa = [
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
         [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
@@ -34,23 +33,18 @@ matriz_colisao = [
         [1, 0, 0, 0, 0, 0, 1, 1, 0, 1], 
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
         [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+        [1, 0, 0, 0, 0, 0, 1, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 0, 1], 
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
        ]
 
-mapa = Mapa([
-        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
-        [1, 2, 2, 2, 0, 0, 2, 2, 2, 1], 
-        [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 2, 0, 0, 0, 1, 0, 0, 1], 
-        [2, 0, 0, 0, 0, 1, 2, 0, 0, 2], 
-        [0, 0, 0, 0, 1, 2, 0, 0, 0, 0], 
-        [1, 0, 0, 1, 2, 0, 1, 1, 0, 1], 
-        [1, 0, 0, 2, 0, 0, 1, 1, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 2, 2, 0, 1], 
-        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
-       ])
+mapaTeste = Mapa(matriz_mapa.copy())
 
 # Criação do player
-player = Player(matriz_colisao, (3,1), mapa.tileLen)
+player = Player(matriz_mapa, (3,1), mapaTeste.tileLen)
 lista_sprites.add(player)
 
 while True:
@@ -62,7 +56,7 @@ while True:
 
     #Renderização
     tela.fill(branco)
-    tela.blits(mapa.quadrados)
+    tela.blits(mapaTeste.quadrados)
     fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
