@@ -30,16 +30,17 @@ def cortar_sprites(nome):
     try:
         sprites = []
         spritesheet = pygame.image.load(os.path.join("Sprites", "Player.png")).convert_alpha()
-        with open(os.path.join("Sprites", "Player.png")) as d:
+        with open(os.path.join("Sprites", "Player.json")) as d:
             metadata = json.load(d)
 
-        for i in range(len(d.self.metadata)):
-            d = metadata["frames"][i]["frame"]
+        for i in range(len(metadata["frames"])):
+            d = metadata["frames"]["sprite_FRACH00.png"]["frame"]
             x, y, w, h = d["x"], d["y"], d["w"], d["h"]
             spr = pygame.Surface((w, h))
             spr.set_colorkey((0,0,0))
             spr.blit(spritesheet, (0,0), (x,y,w,h))
             sprites.append(spr)
+
     except FileNotFoundError:
         print("Erro")
         sprites.append(erro)
