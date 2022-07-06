@@ -1,15 +1,18 @@
 import pygame
 import pygame.display
 
+from Spritesheet import Spritesheet
+
 class Mapa():
     parede = pygame.image.load("tile_brick_wall0.png")
     chao = pygame.image.load("tile_main_floor0.png")
     rodape = pygame.image.load("tile_main_floor_footer0.png")
     detalhe = pygame.image.load("tile_brick_wall_detail0.png")
-    tileLen = parede.get_bounding_rect().width
+
 
     def __init__(self, mapa):
         self.quadrados = [(self.parede, (0,0))]
+        self.spritesheet = Spritesheet("main-room")
         self.colisores = []
         self.matriz_mapa = mapa
 
@@ -23,19 +26,6 @@ class Mapa():
         # Cria cada tile do mapa
         for i in range(len(mapa)):
             for j in range(len(mapa[i])):
-                if mapa[i][j] == 0:
-                    r = pygame.Rect([j*self.tileLen, i*self.tileLen], [self.tileLen, self.tileLen])
-                    self.quadrados.append((self.chao, (j*self.tileLen, i*self.tileLen)))
-                    self.colisores.append(r)
-                elif mapa[i][j] == 1:
-                    r = pygame.Rect([j*self.tileLen, i*self.tileLen], [self.tileLen, self.tileLen])
-                    self.quadrados.append((self.parede, (j*self.tileLen, i*self.tileLen)))
-                    self.colisores.append(r)
-                elif mapa[i][j] == 2:
-                    r = pygame.Rect([j*self.tileLen, i*self.tileLen], [self.tileLen, self.tileLen])
-                    self.quadrados.append((self.rodape, (j*self.tileLen, i*self.tileLen)))
-                    self.colisores.append(r)
-                elif mapa[i][j] == 3:
-                    r = pygame.Rect([j*self.tileLen, i*self.tileLen], [self.tileLen, self.tileLen])
-                    self.quadrados.append((self.detalhe, (j*self.tileLen, i*self.tileLen)))
+                    r = pygame.Rect([j*self.spritesheet.tileLen, i*self.spritesheet.tileLen], [self.spritesheet.tileLen, self.spritesheet.tileLen])
+                    self.quadrados.append((self.spritesheet.cortar_sprite(("tile_main-room" + '{:0>2}'.format(str(mapa[i][j])) + ".png")), (j*self.spritesheet.tileLen, i*self.spritesheet.tileLen)))
                     self.colisores.append(r)

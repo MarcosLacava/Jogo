@@ -2,22 +2,22 @@ import os
 import pygame
 import json
 from typing import Any
+from Spritesheet import Spritesheet
 
 class Player(pygame.sprite.Sprite):
     
     playerrect = pygame.Rect
-    velocidade = 7
+    velocidade = 1
 
-    def __init__(self, mapa, pos_inicial, tileLen, sprites):
+    def __init__(self, mapa, pos_inicial):
         pygame.sprite.Sprite.__init__(self)
         # Inicialização do Player
-        self.sprites = sprites
-        self.image = sprites[0]
-        self.rect = self.sprites[0].get_rect()
+        self.spritesheet = Spritesheet("Player")
+        self.image = self.spritesheet.cortar_sprite("frach_sprite00.png")
+        self.rect = self.image.get_rect()
         self.pos = pos_inicial
         self.dir = (0, 0)
-        self.tileLen = tileLen
-        self.rect.center = (pos_inicial[1]*tileLen+tileLen/2, pos_inicial[0]*tileLen+tileLen/2)
+        self.rect.center = (pos_inicial[1]*self.spritesheet.tileLen+self.spritesheet.tileLen/2, pos_inicial[0]*self.spritesheet.tileLen+self.spritesheet.tileLen/2)
         self.mapa = mapa
         self.mov_count = 0
         
@@ -33,15 +33,15 @@ class Player(pygame.sprite.Sprite):
         if self.dir != (0,0):
             movimento += (self.dir[0]*self.velocidade, self.dir[1]*self.velocidade)
             # Testa se o Player chegou na tile desejada
-            if abs(self.rect.topleft[0] - self.pos[1]*self.tileLen) <= 0.2*self.velocidade and abs(self.rect.topleft[1] - self.pos[0]*self.tileLen) <= 0.2*self.velocidade:
-                self.rect.topleft = (self.pos[1]*self.tileLen, self.pos[0]*self.tileLen)    
+            if abs(self.rect.topleft[0] - self.pos[1]*self.spritesheet.tileLen) <= self.velocidade and abs(self.rect.topleft[1] - self.pos[0]*self.spritesheet.tileLen) <= self.velocidade:
+                self.rect.topleft = (self.pos[1]*self.spritesheet.tileLen, self.pos[0]*self.spritesheet.tileLen)    
                 self.dir = (0,0)
-                self.input()       
+                self.teclas()       
         else:
-            self.input()
+            self.teclas()
         return movimento
 
-    def input(self):
+    def teclas(self):
         # Pega o input e move quando possível
         teclas = pygame.key.get_pressed()
         if teclas[pygame.K_w] and self.pos[0] != 0 and self.mapa[self.pos[0]-1][self.pos[1]] != 1:

@@ -1,243 +1,243 @@
 {
 	"frames": {
-		"sprite_FRACH00.png": {
+		"frach_sprite00.png": {
 			"frame": {
-				"x": 0,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 1,
+				"y": 1,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH01.png": {
+		"frach_sprite01.png": {
 			"frame": {
-				"x": 64,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 19,
+				"y": 1,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH02.png": {
+		"frach_sprite02.png": {
 			"frame": {
-				"x": 128,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 37,
+				"y": 1,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH03.png": {
+		"frach_sprite03.png": {
 			"frame": {
-				"x": 192,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 1,
+				"y": 19,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH04.png": {
+		"frach_sprite04.png": {
 			"frame": {
-				"x": 256,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 19,
+				"y": 19,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH05.png": {
+		"frach_sprite05.png": {
 			"frame": {
-				"x": 320,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 37,
+				"y": 19,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH06.png": {
+		"frach_sprite06.png": {
 			"frame": {
-				"x": 384,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 1,
+				"y": 37,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH07.png": {
+		"frach_sprite07.png": {
 			"frame": {
-				"x": 448,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 19,
+				"y": 37,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH08.png": {
+		"frach_sprite08.png": {
 			"frame": {
-				"x": 512,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 37,
+				"y": 37,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH09.png": {
+		"frach_sprite09.png": {
 			"frame": {
-				"x": 576,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 55,
+				"y": 1,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH10.png": {
+		"frach_sprite10.png": {
 			"frame": {
-				"x": 640,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 55,
+				"y": 19,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		},
-		"sprite_FRACH11.png": {
+		"frach_sprite11.png": {
 			"frame": {
-				"x": 704,
-				"y": 0,
-				"w": 64,
-				"h": 64
+				"x": 55,
+				"y": 37,
+				"w": 16,
+				"h": 16
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			},
 			"sourceSize": {
-				"w": 64,
-				"h": 64
+				"w": 16,
+				"h": 16
 			}
 		}
 	},
@@ -247,8 +247,8 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 768,
-			"h": 64
+			"w": 72,
+			"h": 54
 		},
 		"scale": "1"
 	}
