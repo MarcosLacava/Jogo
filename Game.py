@@ -16,7 +16,7 @@ branco = 255, 255, 255
 
 # Cria a tela e lista de sprites
 size = width, height = 1280, 720
-tela = pygame.display.set_mode(size, pygame.RESIZABLE)
+tela = pygame.display.set_mode(size, pygame.RESIZABLE), pygame.FULLSCREEN
 lista_sprites = pygame.sprite.Group()
 erro = pygame.image.load(os.path.join("Sprites", "Erro.png")).convert()
 
