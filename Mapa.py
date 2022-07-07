@@ -4,14 +4,9 @@ import pygame.display
 from Spritesheet import Spritesheet
 
 class Mapa():
-    parede = pygame.image.load("tile_brick_wall0.png")
-    chao = pygame.image.load("tile_main_floor0.png")
-    rodape = pygame.image.load("tile_main_floor_footer0.png")
-    detalhe = pygame.image.load("tile_brick_wall_detail0.png")
-
 
     def __init__(self, mapa):
-        self.quadrados = [(self.parede, (0,0))]
+        self.quadrados = []
         self.spritesheet = Spritesheet("main-room")
         self.colisores = []
         self.matriz_mapa = mapa
