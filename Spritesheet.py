@@ -1,3 +1,4 @@
+from random import gammavariate
 import pygame
 import json
 import os

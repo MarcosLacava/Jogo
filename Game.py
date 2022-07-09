@@ -10,7 +10,6 @@ clock = pygame.time.Clock()
 
 # Fonte padrão do sistema
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 12) 
-
 preto = 0, 0, 0
 branco = 255, 255, 255
 
@@ -18,9 +17,6 @@ branco = 255, 255, 255
 size = width, height = 1280, 720
 tela = pygame.display.set_mode(size, pygame.RESIZABLE)
 lista_sprites = pygame.sprite.Group()
-erro = pygame.image.load(os.path.join("Sprites", "Erro.png")).convert()
-
-
 
 #Criação do Mapa
 matriz_mapa = [
@@ -47,6 +43,9 @@ mapaTeste = Mapa(matriz_mapa.copy())
 # Criação do player
 player = Player(matriz_mapa, (3,1))
 lista_sprites.add(player)
+
+def trocar_estados():
+    pass
 
 while True:
     #Eventos
