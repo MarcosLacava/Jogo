@@ -19,7 +19,8 @@ branco = 255, 255, 255
 # Game Clock
 clock = pygame.time.Clock()
 
-# Fonte padrão do sistema
+# Fontes
+title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24) 
 
 # Função para desenhar texto na tela.
@@ -68,7 +69,7 @@ while True:
     # Menu Loop
     while main_menu:
         tela.fill((1,1,1))
-        draw_text('A DIRETORIA', fonte, branco, tela, 100, 100)
+        draw_text('A DIRETORIA', title_font, branco, tela, 100, 100)
 
         mx, my = pygame.mouse.get_pos()
         
