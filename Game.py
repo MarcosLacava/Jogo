@@ -1,4 +1,4 @@
-
+import os
 from Player import Player
 import sys, pygame, pygame.freetype
 from Mapa import Mapa

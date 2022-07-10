@@ -12,6 +12,7 @@ class Mapa():
         self.spritesheet = Spritesheet("main-room")
         self.colisores = []
         self.matriz_mapa = mapa
+        self.largura = 13
 
         # Adiciona tiles de transição baseado na matriz do mapa
         for i in range(0, self.largura):
