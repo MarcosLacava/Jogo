@@ -68,6 +68,19 @@ click = False
 while True:
     # Menu Loop
     while main_menu:
+        # Event loop do menu principal
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 
         # Imagens utilizadas na interface do menu principal e seus retângulos
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
@@ -81,9 +94,10 @@ while True:
         quit_button_rect = quit_button.get_rect(center = (416, 516))
         tela.blit(quit_button, quit_button_rect)
 
+        # Capturar a posição x e y do mouse
         mx, my = pygame.mouse.get_pos()
         
-
+        # Condição para o botão de play ser acessado:
         if play_button_rect.collidepoint((mx, my)):
             play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert()
             tela.blit(play_button, play_button_rect)
@@ -91,6 +105,8 @@ while True:
                 main_menu = False
                 game = True
                 break
+
+        # Condição para o botão de quit ser acessado:
         if quit_button_rect.collidepoint((mx, my)):
             quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button-hover.png'))).convert()
             tela.blit(quit_button, quit_button_rect)
@@ -98,19 +114,6 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
                     
         pygame.display.update()
         clock.tick(30)
