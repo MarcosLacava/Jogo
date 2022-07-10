@@ -64,25 +64,36 @@ click = False
 while True:
     # Menu Loop
     while main_menu:
-        tela.fill((1,1,1))
-        draw_text('A DIRETORIA', title_font, branco, tela, 100, 100)
+
+        # Imagens utilizadas na interface do menu principal e seus retângulos
+        bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
+        tela.blit(bg,(0,0))
+
+        play_button = pygame.image.load((os.path.join('Sprites','menu','play_button.png'))).convert()
+        play_button_rect = play_button.get_rect(center = (416,416))
+        tela.blit(play_button, play_button_rect)
+
+        quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button.png'))).convert_alpha()
+        quit_button_rect = quit_button.get_rect(center = (416, 516))
+        tela.blit(quit_button, quit_button_rect)
 
         mx, my = pygame.mouse.get_pos()
         
-        button_1 = pygame.Rect(100, 200, 200, 50)
-        button_2 = pygame.Rect(100, 400, 200, 50)
 
-        if button_1.collidepoint((mx, my)):
+        if play_button_rect.collidepoint((mx, my)):
+            play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert()
+            tela.blit(play_button, play_button_rect)
             if click:
                 main_menu = False
                 game = True
                 break
-        if button_2.collidepoint((mx, my)):
+        if quit_button_rect.collidepoint((mx, my)):
+            quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button-hover.png'))).convert()
+            tela.blit(quit_button, quit_button_rect)
             if click:
-                pass
+                pygame.quit()
+                sys.exit()
 
-        pygame.draw.rect(tela, (255,0,0), button_1)
-        pygame.draw.rect(tela, (255,0,0), button_2)
 
         click = False
         for event in pygame.event.get():
@@ -96,7 +107,6 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-                    print(click)
                     
         pygame.display.update()
         clock.tick(30)
