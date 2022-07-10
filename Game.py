@@ -1,9 +1,8 @@
-from inspect import FullArgSpec
-import os
-from tkinter import EventType
+
 from Player import Player
 import sys, pygame, pygame.freetype
 from Mapa import Mapa
+import copy
 
 pygame.init()
 
@@ -23,7 +22,7 @@ clock = pygame.time.Clock()
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24) 
 
-# Função para desenhar texto na tela.
+# Função para desenhar texto na tela
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, color, preto)
     textobj[1].topleft = (x, y)
@@ -33,30 +32,27 @@ def draw_text(text, font, color, surface, x, y):
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 size = width, height = 832, 832
-tela = pygame.display.set_mode(size, pygame.RESIZABLE)
+tela = pygame.display.set_mode(size)
 lista_sprites = pygame.sprite.Group()
 
 #Criação do Mapa
 matriz_mapa = [
-        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 1, 0, 0, 1], 
-        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 1, 0, 0, 1, 1, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 1, 1, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
-        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0, 1, 1, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 0, 1], 
-        [1, 1, 1, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
        ]
 
-mapaTeste = Mapa(matriz_mapa.copy())
+mapaTeste = Mapa(copy.deepcopy(matriz_mapa))
 
 # Criação do player
 player = Player(matriz_mapa, (3,1))

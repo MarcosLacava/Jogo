@@ -7,7 +7,7 @@ from Spritesheet import Spritesheet
 class Player(pygame.sprite.Sprite):
     
     playerrect = pygame.Rect
-    velocidade = 3
+    velocidade = 6
 
     def __init__(self, mapa, pos_inicial):
         pygame.sprite.Sprite.__init__(self)
@@ -89,8 +89,9 @@ class Player(pygame.sprite.Sprite):
         if teclas[pygame.K_e] and not self.interagindo:
             self.interagir()
 
-    def interagir():
+    def interagir(self):
         pass
+        # if self.pos - self.dir
 
     def animar(self):
         self.frame += 1
