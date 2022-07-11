@@ -33,6 +33,7 @@ def draw_text(text, font, color, surface, x, y):
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 size = width, height = 832, 832
 tela = pygame.display.set_mode(size)
+pygame.display.set_caption("A DIRETORIA")
 lista_sprites = pygame.sprite.Group()
 
 #Criação do Mapa
@@ -125,17 +126,17 @@ while True:
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-            if event.type == pygame.VIDEORESIZE:
-                if not fullscreen:
-                    tela = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            # if event.type == pygame.VIDEORESIZE:
+            #     if not fullscreen:
+            #         tela = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
         
-            if  event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f:
-                    fullscreen = not fullscreen
-                    if fullscreen:
-                        tela = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
-                    else:
-                        tela = pygame.display.set_mode((size), pygame.RESIZABLE)
+            # if  event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_f:
+            #         fullscreen = not fullscreen
+            #         if fullscreen:
+            #             tela = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+            #         else:
+            #             tela = pygame.display.set_mode((size), pygame.RESIZABLE)
 
         player.update()
 
