@@ -4,6 +4,7 @@ import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
 
+
 pygame.init()
 
 # Estados do jogo:
@@ -20,21 +21,24 @@ clock = pygame.time.Clock()
 
 # Fontes
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
-fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24) 
+fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
+
+# Musicas
+main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
+
+def music(state, name):
+    if state:
+        pygame.mixer.music.load(name)
+        pygame.mixer.music.play(0, 0, 1000)
+        pygame.mixer.music.set_volume(0.5)
+    else:
+        pygame.mixer.music.fadeout(1000)
 
 # Função para desenhar texto na tela
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, color, preto)
     textobj[1].topleft = (x, y)
     surface.blit(textobj[0],textobj[1])
-
-# Musica
-if main_menu:
-    music = pygame.mixer.music.load(os.path.join('Music','NGGYU.ogg'))
-    pygame.mixer.music.play(0, 0.0, 1)
-    pygame.mixer.music.set_volume(0.3)
-else:
-    pygame.mixer.music.stop()
 
 
 # Cria a tela e lista de sprites
@@ -69,6 +73,8 @@ lista_sprites.add(player)
 
 click = False
 
+music(main_menu, main_menu_theme)
+
 # Main Loop
 while True:
     # Menu Loop
@@ -86,6 +92,7 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
 
         # Imagens utilizadas na interface do menu principal e seus retângulos
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
@@ -110,6 +117,7 @@ while True:
             tela.blit(play_button, play_button_rect)
             if click:
                 main_menu = False
+                music(main_menu, main_menu_theme)
                 game = True
                 break
 
