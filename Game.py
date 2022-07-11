@@ -28,6 +28,14 @@ def draw_text(text, font, color, surface, x, y):
     textobj[1].topleft = (x, y)
     surface.blit(textobj[0],textobj[1])
 
+# Musica
+if main_menu:
+    music = pygame.mixer.music.load(os.path.join('Music','NGGYU.ogg'))
+    pygame.mixer.music.play(0, 0.0, 1)
+    pygame.mixer.music.set_volume(0.3)
+else:
+    pygame.mixer.music.stop()
+
 
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -83,7 +91,7 @@ while True:
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
         tela.blit(bg,(0,0))
 
-        play_button = pygame.image.load((os.path.join('Sprites','menu','play_button.png'))).convert()
+        play_button = pygame.image.load((os.path.join('Sprites','menu','play_button.png'))).convert_alpha()
         play_button_rect = play_button.get_rect(center = (416,416))
         tela.blit(play_button, play_button_rect)
 
@@ -93,10 +101,12 @@ while True:
 
         # Capturar a posição x e y do mouse
         mx, my = pygame.mouse.get_pos()
+
+        
         
         # Condição para o botão de play ser acessado:
         if play_button_rect.collidepoint((mx, my)):
-            play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert()
+            play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert_alpha()
             tela.blit(play_button, play_button_rect)
             if click:
                 main_menu = False
@@ -105,7 +115,7 @@ while True:
 
         # Condição para o botão de quit ser acessado:
         if quit_button_rect.collidepoint((mx, my)):
-            quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button-hover.png'))).convert()
+            quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button-hover.png'))).convert_alpha()
             tela.blit(quit_button, quit_button_rect)
             if click:
                 pygame.quit()
