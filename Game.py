@@ -1,8 +1,10 @@
 import os
+from pickletools import pyinteger_or_bool
 from Player import Player
 import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
+import Text
 
 
 pygame.init()
@@ -13,7 +15,7 @@ pause_menu = False
 game = False
 
 # Cores
-preto = 0, 0, 0
+preto = 1, 1, 1
 branco = 255, 255, 255
 
 # Game Clock
@@ -22,6 +24,18 @@ clock = pygame.time.Clock()
 # Fontes
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
+
+
+# Função para desenhar texto na tela
+def draw_text(text, font, color, surface, x, y):
+    textobj = font.render(text, color)
+    textobj[1].topleft = (x, y)
+    surface.blit(textobj[0],textobj[1])
+    if game:
+        font = fonte
+        color = preto
+
+        
 
 # Musicas
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -34,13 +48,6 @@ def music(state, name):
     else:
         pygame.mixer.music.fadeout(1000)
 
-# Função para desenhar texto na tela
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, color, preto)
-    textobj[1].topleft = (x, y)
-    surface.blit(textobj[0],textobj[1])
-
-
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 size = width, height = 832, 832
@@ -48,7 +55,9 @@ tela = pygame.display.set_mode(size)
 pygame.display.set_caption("A DIRETORIA")
 lista_sprites = pygame.sprite.Group()
 
-#Criação do Mapa
+dialogo = Text.Text("Marcos é foda", title_font, (branco), tela, 25, 581)
+
+# Criação do Mapa
 matriz_mapa = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
@@ -71,8 +80,8 @@ mapaTeste = Mapa(copy.deepcopy(matriz_mapa))
 player = Player(matriz_mapa, (3,1))
 lista_sprites.add(player)
 
-click = False
 
+click = False
 music(main_menu, main_menu_theme)
 
 # Main Loop
@@ -143,6 +152,11 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    dialogo.text_box()
+                    print("Marcos é foda")
+            
 
             # if event.type == pygame.VIDEORESIZE:
             #     if not fullscreen:
