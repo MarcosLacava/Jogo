@@ -17,8 +17,8 @@ class Text():
 
     def text_box(self):
 
-        box_rect = pygame.Rect(0, 556, 832, 276)
-        box_surf = pygame.draw.rect(self.surface, (1,1,1), box_rect)
+        box_rect = pygame.Rect(10, 556, 812, 266)
+        box_surf = pygame.draw.rect(self.surface, (1,1,1,0.5), box_rect)
         box_stroke = pygame.draw.rect(self.surface, (255,255,255), box_rect, 5)
 
         self.text_content = self.font.render(self.text, self.color)
