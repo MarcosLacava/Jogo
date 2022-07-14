@@ -1,3 +1,4 @@
+from operator import truediv
 import os
 from pickletools import pyinteger_or_bool
 from xmlrpc.client import FastParser
@@ -6,6 +7,7 @@ import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
 import Button
+import Flor
 import json
 
 pygame.init()
@@ -20,6 +22,7 @@ preto = 1, 1, 1
 branco = 255, 255, 255
 
 # Game Clock
+tempo = 0
 clock = pygame.time.Clock()
 
 # Fontes
@@ -35,6 +38,8 @@ salas = {"MAIN":True,
          "SALA6":False,
          "SALA7":False,
          }
+
+primeiro_loop = copy.deepcopy(salas)
 
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -55,12 +60,12 @@ player = Player((8,6))
 player.set_mapa(mapaAtual.gerar_colisoes(), interagiveis)
 lista_sprites.add(player)
 
-
 def trocar_sala(nova, posicao=(0,0)):
     # Troca o estado do jogo (salas/menus)
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
+    primeiro_loop[nova] = True
 
     fade = pygame.Surface(size) # Objeto do fade
     fade.fill(preto)
@@ -90,12 +95,12 @@ def renderização(update=True):
     # Faz todas as renderizações necessárias
     tela.fill(preto)
     tela.blits(mapaAtual.quadrados)
-    fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
     if update:
         pygame.display.update()
-        clock.tick(30)
+        global tempo
+        tempo += clock.tick(30)
   
 def event_loop():
     # Lida com eventos (Botões, Fechamento)
@@ -113,6 +118,8 @@ def event_loop():
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
                             destino = interagiveis[cords_string]["destino"]    
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+                        if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 11:
+                            pass
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -195,7 +202,12 @@ while True:
 
     # Game Loop
     while salas['MAIN']:
-        renderização()
+        renderização(False)
+        fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
+        fonte.render_to(tela, [0, 32], str(tempo), branco)
+        pygame.display.update()
+        tempo += clock.tick(30)
+
         event_loop()
         player.update()
 
@@ -230,13 +242,26 @@ while True:
         renderização()
 
     while salas["SALA6"]:
+        if primeiro_loop["SALA6"]:
+            flor = Flor.Flor(tempo, interagiveis["Flor"]["pos"])
+            primeiro_loop["SALA6"] = False
+
+        player.update()
+        renderização(False)
+
+        nova_tile = flor.update(tempo)
+
+        if nova_tile > 0:
+            mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], nova_tile)
+        
+        fonte.render_to(tela, [0, 0], str(tempo), branco)
+
+        pygame.display.update()
+        tempo += clock.tick(30)
 
         event_loop()
-        player.update()
-        renderização()
 
     while salas["SALA7"]:
-
         event_loop()
         player.update()
         renderização()
