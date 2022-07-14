@@ -5,7 +5,7 @@ import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
 import Button
-
+import json
 import Porta
 
 pygame.init()
@@ -38,21 +38,7 @@ lista_sprites = pygame.sprite.Group()
 
 
 # Criação do Mapa
-matriz_mapa = [
-        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-        [2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], 
-        [2, 3 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2],
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-       ]
+
 
 interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
                 (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
@@ -67,7 +53,13 @@ salas = {"DIRETORIA":True,
          "SALA7":False,
          }
 
-mapaTeste = Mapa(copy.deepcopy(matriz_mapa), "main-room", interagiveis)
+with open(os.path.join("Mapas.json")) as m:
+    mapas = json.load(m)
+
+mapaTeste = Mapa(copy.deepcopy(mapas["Main"]["matriz_mapa"]), "main-room", interagiveis)
+mapaSala1 = Mapa(copy.deepcopy(mapas["matriz_sala1"]), "main-room", interagiveis)
+mapaSala2 = Mapa(copy.deepcopy(mapas["matriz_sala2"]), "main-room", interagiveis)
+mapaSala3 = Mapa(copy.deepcopy(mapas["matriz_sala3"]), "main-room", interagiveis)
 
 # Criação do player
 player = Player((8,6))
@@ -193,3 +185,20 @@ while True:
                         trocar_sala(interagiveis[cords].destino)
 
         player.update()
+        renderização()
+
+    while salas["SALA1"]:
+        renderização()
+    while salas["SALA2"]:
+        renderização()
+    while salas["SALA3"]:
+        renderização()
+    while salas["SALA4"]:
+        renderização()
+    while salas["SALA5"]:
+        renderização()
+    while salas["SALA6"]:
+        renderização()
+    while salas["SALA7"]:
+        renderização()
+            
