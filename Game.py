@@ -173,11 +173,6 @@ while True:
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
         tela.blit(bg,(0,0))
 
-
-        play_button.blit_button(tela)
-        quit_button.blit_button(tela)
-
-
         # Condição para o botão de play ser acessado:
         if play_button.blit_button(tela) and click:
             main_menu = False
