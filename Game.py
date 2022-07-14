@@ -56,7 +56,7 @@ tela = pygame.display.set_mode(size)
 pygame.display.set_caption("A DIRETORIA")
 lista_sprites = pygame.sprite.Group()
 
-dialogo = Text.Text("Marcos é foda", title_font, (branco), tela, 25, 581)
+dialogo = Text.Text("Marcos é fodaasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd", title_font, (branco), tela, 25, 581)
 
 # Criação do Mapa
 matriz_mapa = [
