@@ -4,7 +4,7 @@ from Player import Player
 import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
-import Text
+import Button
 import json
 import Porta
 
@@ -27,18 +27,6 @@ title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
 
 
-# Seção da música
-main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
-
-def music(state, name):
-    if state:
-        pygame.mixer.music.load(name)
-        pygame.mixer.music.play(0, 0, 1000)
-        pygame.mixer.music.set_volume(0.5)
-    else:
-        pygame.mixer.music.fadeout(1000)
-
-music(main_menu, main_menu_theme)
 
 
 # Cria a tela e lista de sprites
@@ -48,7 +36,6 @@ tela = pygame.display.set_mode(size)
 pygame.display.set_caption("A DIRETORIA")
 lista_sprites = pygame.sprite.Group()
 
-dialogo = Text.Text("Marcos é brabo", (branco), tela, 30, 634)
 
 # Criação do Mapa
 
@@ -76,7 +63,6 @@ player = Player((8,6))
 player.set_mapa(mapaAtual.gerar_colisoes(), interagiveis)
 lista_sprites.add(player)
 
-click = False
 
 def trocar_sala(nova):
     for i in salas.keys():
@@ -93,8 +79,7 @@ def renderização():
     fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
-    dialogo.text_box()
-
+    
     pygame.display.update()
     clock.tick(30)
   
@@ -111,6 +96,43 @@ def event_loop():
                         cords = player.proximo()
                         if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
                             trocar_sala(interagiveis[cords].destino)
+
+
+# Seção da música
+main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
+
+def music(state, name):
+    if state:
+        pygame.mixer.music.load(name)
+        pygame.mixer.music.play(0, 0, 1000)
+        pygame.mixer.music.set_volume(0.5)
+    else:
+        pygame.mixer.music.fadeout(1000)
+
+music(main_menu, main_menu_theme)
+
+
+def text_box(surface, text):
+        
+        # Fonte do text box
+        text_box_font = pygame.font.Font((os.path.join("Fonts", "yoster-island.regular.ttf")), 24)
+
+        # Caixa do texto.
+        box_rect = pygame.Rect(10, 614, 812, 208)
+        box_surf = pygame.draw.rect(surface, (1,1,1,0.5), box_rect)
+        box_stroke = pygame.draw.rect(surface, (255,255,255), box_rect, 5)
+
+        # Conteúdo da caixa de texto.
+        text_content = text_box_font.render(text, False, (255,255,255))
+        text_content_rect = text_content.get_rect(topleft = (30, 634))
+        surface.blit(text_content, text_content_rect)
+
+        return box_surf, box_stroke
+
+
+# Settings (Temporário)
+play_button = Button.Button("play_button", (416,416))
+quit_button = Button.Button("quit_button", (416,516))
 
 # Main Loop
 while True:
@@ -135,43 +157,31 @@ while True:
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
         tela.blit(bg,(0,0))
 
-        play_button = pygame.image.load((os.path.join('Sprites','menu','play_button.png'))).convert_alpha()
-        play_button_rect = play_button.get_rect(center = (416,416))
-        tela.blit(play_button, play_button_rect)
 
-        quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button.png'))).convert_alpha()
-        quit_button_rect = quit_button.get_rect(center = (416, 516))
-        tela.blit(quit_button, quit_button_rect)
+        play_button.blit_button(tela)
+        quit_button.blit_button(tela)
 
-        # Capturar a posição x e y do mouse
-        mx, my = pygame.mouse.get_pos()
 
         # Condição para o botão de play ser acessado:
-        if play_button_rect.collidepoint((mx, my)):
-            play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert_alpha()
-            tela.blit(play_button, play_button_rect)
-            if click:
-                main_menu = False
-                music(main_menu, main_menu_theme)
-                game = True
-                break
+        if play_button and click:
+            main_menu = False
+            music(main_menu, main_menu_theme)
+            game = True
+            break
 
         # Condição para o botão de quit ser acessado:
-        if quit_button_rect.collidepoint((mx, my)):
-            quit_button = pygame.image.load((os.path.join('Sprites','menu','quit_button-hover.png'))).convert_alpha()
-            tela.blit(quit_button, quit_button_rect)
-            if click:
-                pygame.quit()
-                sys.exit()
+        if quit_button and click:
+            pygame.quit()
+            sys.exit()
                     
         pygame.display.update()
         clock.tick(30)
 
     # Game Loop
     while salas['MAIN']:
+        renderização()
         event_loop()
         player.update()
-        renderização()
 
     while salas["SALA1"]:
         
