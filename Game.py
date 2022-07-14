@@ -29,6 +29,7 @@ clock = pygame.time.Clock()
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
 
+# Estados do jogo
 salas = {"MAIN":True,
          "SALA1":False,
          "SALA2":False,
@@ -38,8 +39,8 @@ salas = {"MAIN":True,
          "SALA6":False,
          "SALA7":False,
          }
-
 primeiro_loop = copy.deepcopy(salas)
+puzzles = [False]*7
 
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -118,8 +119,11 @@ def event_loop():
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
                             destino = interagiveis[cords_string]["destino"]    
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
-                        if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 11:
-                            pass
+                        elif 12 <= mapaAtual.matriz_mapa[cords[0]][cords[1]] <= 28: # Flor
+                            if flor.idade == 10 and not flor.coletada:                          
+                                flor.coletar()
+                                mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                                puzzles[6] = True # Puzzle 6 resolvido
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -238,7 +242,7 @@ while True:
 
     while salas["SALA6"]:
         if primeiro_loop["SALA6"]:
-            flor = Flor.Flor(tempo, interagiveis["Flor"]["pos"])
+            flor = Flor.Flor(tempo, puzzles[6])
             primeiro_loop["SALA6"] = False
 
         player.update()
