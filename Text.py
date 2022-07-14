@@ -25,8 +25,6 @@ class Text():
         self.text_content[1].topleft = self.pos
         self.surface.blit(self.text_content[0],self.text_content[1])
 
-        # tela.blit(box_surf, box_rect)
-        # tela.blit(box_stroke, box_rect)
         return box_surf, box_stroke
         
         
