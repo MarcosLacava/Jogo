@@ -78,7 +78,6 @@ matriz_mapa = [
 interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
                 (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
 
-
 salas = {"DIRETORIA":True,
          "SALA1":False,
          "SALA2":False,
@@ -101,8 +100,8 @@ click = False
 music(main_menu, main_menu_theme)
 
 def trocar_sala(nova):
-    for i in salas:
-        i = False
+    for i in salas.keys():
+        salas[i] = False
     salas[nova] = True
     print(salas[nova])
     
@@ -113,6 +112,7 @@ def renderização():
     fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
+    dialogo.text_box()
 
     pygame.display.update()
     clock.tick(30)
