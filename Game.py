@@ -173,8 +173,7 @@ while True:
         clock.tick(30)
 
     # Game Loop
-    while game:
-        #Eventos
+    while salas['DIRETORIA']:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 pygame.quit()
@@ -182,45 +181,11 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-            
-
-            # if event.type == pygame.VIDEORESIZE:
-            #     if not fullscreen:
-            #         tela = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-        
-            # if  event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_f:
-            #         fullscreen = not fullscreen
-            #         if fullscreen:
-            #             tela = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
-            #         else:
-            #             tela = pygame.display.set_mode((size), pygame.RESIZABLE)
+                if event.key == pygame.K_e and not player.interagindo:
+                    cords = player.proximo()
+                    if mapaTeste.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
+                        trocar_sala(interagiveis[cords].destino)
 
         player.update()
-
-        #Renderização
-        tela.fill(preto)
-        tela.blits(mapaTeste.quadrados)
-        fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
-
-        lista_sprites.draw(tela)
-        dialogo.text_box()
-
-        pygame.display.update()
-        clock.tick(30)
-        while salas['DIRETORIA']:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: 
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-                    if event.key == pygame.K_e and not player.interagindo:
-                        cords = player.proximo()
-                        if mapaTeste.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
-                            trocar_sala(interagiveis[cords].destino)
-
-            player.update()
-            renderização()
+        renderização()
             
