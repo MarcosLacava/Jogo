@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.spritesheet = Spritesheet("Player")
         self.image = self.spritesheet.cortar_sprite("sprite_frach00.png")
         self.rect = self.image.get_rect()
+        self.tileLen = 64
 
         # Variáveis da posição e movimento:
         self.pos = pos_inicial
@@ -41,6 +42,12 @@ class Player(pygame.sprite.Sprite):
         self.colisoes = colisao
         self.interagiveis = interagiveis
         #self.mapa_interacoes = interacao
+
+    def set_pos(self, nova_pos):
+        # Reposiciona o player no centro da tile indicada
+        # Necessário para mudanças abruptas de movimento (ex: nova posição depois de interagir com a porta) 
+        self.rect.center = nova_pos[1] * self.tileLen + self.tileLen // 2, nova_pos[0] * self.tileLen + self.tileLen // 2
+        self.pos = nova_pos
 
     def get_interagindo(self):
         return self.interagindo
