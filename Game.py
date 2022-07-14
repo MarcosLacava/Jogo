@@ -6,6 +6,7 @@ from Mapa import Mapa
 import copy
 import Text
 
+import Porta
 
 pygame.init()
 
@@ -59,31 +60,63 @@ dialogo = Text.Text("Marcos é fodaasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
 
 # Criação do Mapa
 matriz_mapa = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], 
+        [2, 3 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2],
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
        ]
 
-mapaTeste = Mapa(copy.deepcopy(matriz_mapa))
+interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
+                (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
+
+
+salas = {"DIRETORIA":True,
+         "SALA1":False,
+         "SALA2":False,
+         "SALA3":False,
+         "SALA4":False,
+         "SALA5":False,
+         "SALA6":False,
+         "SALA7":False,
+         }
+
+mapaTeste = Mapa(copy.deepcopy(matriz_mapa), "main-room", interagiveis)
 
 # Criação do player
-player = Player(matriz_mapa, (3,1))
+player = Player((8,6))
+player.set_mapa(mapaTeste.gerar_colisoes(), interagiveis)
 lista_sprites.add(player)
 
 
 click = False
 music(main_menu, main_menu_theme)
 
+def trocar_sala(nova):
+    for i in salas:
+        i = False
+    salas[nova] = True
+    print(salas[nova])
+    
+def renderização():
+    # Faz todas as renderizações necessárias
+    tela.fill(preto)
+    tela.blits(mapaTeste.quadrados)
+    fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
+
+    lista_sprites.draw(tela)
+
+    pygame.display.update()
+    clock.tick(30)
+  
 # Main Loop
 while True:
     # Menu Loop
@@ -118,8 +151,6 @@ while True:
         # Capturar a posição x e y do mouse
         mx, my = pygame.mouse.get_pos()
 
-        
-        
         # Condição para o botão de play ser acessado:
         if play_button_rect.collidepoint((mx, my)):
             play_button = pygame.image.load((os.path.join('Sprites','menu','play_button-hover.png'))).convert_alpha()
@@ -137,7 +168,6 @@ while True:
             if click:
                 pygame.quit()
                 sys.exit()
-
                     
         pygame.display.update()
         clock.tick(30)
@@ -178,3 +208,19 @@ while True:
 
         pygame.display.update()
         clock.tick(30)
+        while salas['DIRETORIA']:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                    if event.key == pygame.K_e and not player.interagindo:
+                        cords = player.proximo()
+                        if mapaTeste.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
+                            trocar_sala(interagiveis[cords].destino)
+
+            player.update()
+            renderização()
+            

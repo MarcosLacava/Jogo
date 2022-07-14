@@ -8,8 +8,7 @@ class Player(pygame.sprite.Sprite):
     
     playerrect = pygame.Rect
 
-
-    def __init__(self, mapa, pos_inicial):
+    def __init__(self, pos_inicial):
         pygame.sprite.Sprite.__init__(self)
         # Variáveis da Sprite:
         self.spritesheet = Spritesheet("Player")
@@ -20,7 +19,6 @@ class Player(pygame.sprite.Sprite):
         self.pos = pos_inicial
         self.dir = (0, 0)
         self.rect.center = (pos_inicial[1]*self.spritesheet.tileLen+self.spritesheet.tileLen/2, pos_inicial[0]*self.spritesheet.tileLen+self.spritesheet.tileLen/2)
-        self.mapa = mapa
         self.mov_count = 0
         self.andando = False
         self.velocidade = 6
@@ -38,6 +36,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.center += self.movimento()      
         self.teclas()
         return super().update(*args, **kwargs)
+
+    def set_mapa(self, colisao, interagiveis):
+        self.colisoes = colisao
+        self.interagiveis = interagiveis
+        #self.mapa_interacoes = interacao
+
+    def get_interagindo(self):
+        return self.interagindo
 
     def mover(self, posicao):
         # Move o sprite do Player
@@ -70,7 +76,7 @@ class Player(pygame.sprite.Sprite):
         if not self.andando:
             if teclas[pygame.K_w]:
                 self.dir = (0,-1)
-                if self.pos[0] != 0 and self.mapa[self.pos[0]-1][self.pos[1]] != 1:
+                if self.pos[0] != 0 and self.colisoes[self.pos[0]-1][self.pos[1]] != 1:
                     self.pos = (self.pos[0]-1, self.pos[1])        
                     self.image = self.spritesheet.cortar_sprite("sprite_frach04.png")
                     self.frame_inicial = 4
@@ -80,7 +86,7 @@ class Player(pygame.sprite.Sprite):
 
             elif teclas[pygame.K_s]:
                 self.dir = (0,1)
-                if self.pos[0] != len(self.mapa)-1 and self.mapa[self.pos[0]+1][self.pos[1]] != 1:
+                if self.pos[0] != len(self.colisoes)-1 and self.colisoes[self.pos[0]+1][self.pos[1]] != 1:
                     self.pos = (self.pos[0]+1, self.pos[1])
                     self.image = self.spritesheet.cortar_sprite("sprite_frach01.png")
                     self.frame_inicial = 1
@@ -90,7 +96,7 @@ class Player(pygame.sprite.Sprite):
 
             elif teclas[pygame.K_a]:      
                 self.dir = (-1,0)
-                if self.pos[1] != 0 and self.mapa[self.pos[0]][self.pos[1]-1] != 1:
+                if self.pos[1] != 0 and self.colisoes[self.pos[0]][self.pos[1]-1] != 1:
                     self.pos = (self.pos[0], self.pos[1]-1)
                     self.image = self.spritesheet.cortar_sprite("sprite_frach10.png")
                     self.frame_inicial = 10
@@ -100,7 +106,7 @@ class Player(pygame.sprite.Sprite):
 
             elif teclas[pygame.K_d]:
                 self.dir = (1,0)
-                if self.pos[1] != len(self.mapa[0])-1 and self.mapa[self.pos[0]][self.pos[1]+1] != 1: 
+                if self.pos[1] != len(self.colisoes[0])-1 and self.colisoes[self.pos[0]][self.pos[1]+1] != 1: 
                     self.pos = (self.pos[0], self.pos[1]+1)
                     self.image = self.spritesheet.cortar_sprite("sprite_frach07.png")
                     self.frame_inicial = 7
@@ -108,13 +114,9 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.image = self.spritesheet.cortar_sprite("sprite_frach06.png")
 
-        if teclas[pygame.K_e] and not self.interagindo:
-            self.interagir()
-
-    def interagir(self):
-        if self.mapa[self.pos[0] + self.dir[1]][self.pos[1] + self.dir[0]] == 1:
-            print("Interagiu")
-            pass
+    def proximo(self):
+        # Retorna as coordenadas da tile que o player está olhando
+        return (self.pos[0] + self.dir[1], self.pos[1] + self.dir[0])
 
     def animar(self):
         self.frame += 1
