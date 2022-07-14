@@ -5,8 +5,6 @@ from typing import Any
 from Spritesheet import Spritesheet
 
 class Player(pygame.sprite.Sprite):
-    
-    playerrect = pygame.Rect
 
     def __init__(self, pos_inicial):
         pygame.sprite.Sprite.__init__(self)
@@ -15,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.spritesheet.cortar_sprite("sprite_frach00.png")
         self.rect = self.image.get_rect()
         self.tileLen = 64
+        self.playerrect = pygame.Rect
 
         # Variáveis da posição e movimento:
         self.pos = pos_inicial
@@ -35,7 +34,7 @@ class Player(pygame.sprite.Sprite):
     
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()      
-        self.teclas()   
+        self.teclas()  
         return super().update(*args, **kwargs)
 
     def set_mapa(self, colisao, interagiveis):
@@ -51,10 +50,6 @@ class Player(pygame.sprite.Sprite):
 
     def get_interagindo(self):
         return self.interagindo
-
-    def mover(self, posicao):
-        # Move o sprite do Player
-        self.rect.center = posicao 
 
     def movimento(self):
         # Realiza o movimento do Player no mapa em tiles
