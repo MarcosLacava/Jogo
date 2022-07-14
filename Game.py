@@ -26,7 +26,8 @@ clock = pygame.time.Clock()
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
 
-# Musicas
+
+# Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
 
 def music(state, name):
@@ -37,6 +38,9 @@ def music(state, name):
     else:
         pygame.mixer.music.fadeout(1000)
 
+music(main_menu, main_menu_theme)
+
+
 # Cria a tela e lista de sprites
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 size = width, height = 832, 832
@@ -44,7 +48,7 @@ tela = pygame.display.set_mode(size)
 pygame.display.set_caption("A DIRETORIA")
 lista_sprites = pygame.sprite.Group()
 
-dialogo = Text.Text("Marcos é fodaasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd", title_font, (branco), tela, 25, 581)
+dialogo = Text.Text("Marcos é brabo", (branco), tela, 30, 634)
 
 # Criação do Mapa
 
@@ -77,14 +81,15 @@ lista_sprites.add(player)
 
 
 click = False
-music(main_menu, main_menu_theme)
+
 
 def trocar_sala(nova):
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
     print(salas[nova])
-    
+
+
 def renderização():
     # Faz todas as renderizações necessárias
     tela.fill(preto)
@@ -97,6 +102,7 @@ def renderização():
     pygame.display.update()
     clock.tick(30)
   
+
 # Main Loop
 while True:
     # Menu Loop
