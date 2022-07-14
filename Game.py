@@ -1,12 +1,12 @@
 import os
 from pickletools import pyinteger_or_bool
+from xmlrpc.client import FastParser
 from Player import Player
 import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
 import Button
 import json
-import Porta
 
 pygame.init()
 
@@ -20,28 +20,12 @@ preto = 1, 1, 1
 branco = 255, 255, 255
 
 # Game Clock
+tempo = 
 clock = pygame.time.Clock()
 
 # Fontes
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
-
-
-
-
-# Cria a tela e lista de sprites
-monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-size = width, height = 832, 832
-tela = pygame.display.set_mode(size)
-pygame.display.set_caption("A DIRETORIA")
-lista_sprites = pygame.sprite.Group()
-
-
-# Criação do Mapa
-
-
-interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
-                (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
 
 salas = {"MAIN":True,
          "SALA1":False,
@@ -53,9 +37,18 @@ salas = {"MAIN":True,
          "SALA7":False,
          }
 
+# Cria a tela e lista de sprites
+monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+size = width, height = 832, 832
+tela = pygame.display.set_mode(size)
+pygame.display.set_caption("A DIRETORIA")
+lista_sprites = pygame.sprite.Group()
+
+# Criação do Mapa
 with open(os.path.join("Mapas.json")) as m:
     mapas = json.load(m) # Carrega os mapas no .json
 
+interagiveis = mapas["MAIN"]["interagiveis"]
 mapaAtual = Mapa(copy.deepcopy(mapas["MAIN"]["matriz"]) , mapas["MAIN"]["spritesheet"], interagiveis)
 
 # Criação do player
@@ -64,24 +57,46 @@ player.set_mapa(mapaAtual.gerar_colisoes(), interagiveis)
 lista_sprites.add(player)
 
 
-def trocar_sala(nova):
+def trocar_sala(nova, posicao=(0,0)):
+    # Troca o estado do jogo (salas/menus)
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
+
+    fade = pygame.Surface(size) # Objeto do fade
+    fade.fill(preto)
+
+    for i in range(255): # Fade out
+        fade.set_alpha(i)
+        renderização(update=False)
+        tela.blit(fade, (0,0))
+        pygame.display.update()
+        clock.tick(255)
+
     global mapaAtual
+    global interagiveis
+    interagiveis = mapas[nova]["interagiveis"]
     mapaAtual = Mapa(copy.deepcopy(mapas[nova]["matriz"]) , mapas[nova]["spritesheet"], interagiveis)
+    player.set_pos(posicao)
     print(salas)
 
-def renderização():
+    for i in range(255, 0, -1): # Fade in
+        fade.set_alpha(i)
+        renderização(update=False)
+        tela.blit(fade, (0,0))
+        pygame.display.update()
+        clock.tick(255)
+
+def renderização(update=True):
     # Faz todas as renderizações necessárias
     tela.fill(preto)
     tela.blits(mapaAtual.quadrados)
     fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
-    
-    pygame.display.update()
-    clock.tick(30)
+    if update:
+        pygame.display.update()
+        clock.tick(30)
   
 def event_loop():
     # Lida com eventos (Botões, Fechamento)
@@ -95,8 +110,10 @@ def event_loop():
                     if event.key == pygame.K_e and not player.interagindo:
                         cords = player.proximo()
                         if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
-                            trocar_sala(interagiveis[cords].destino)
-
+                            # Converte as coordenadas para o formato da key
+                            cords_string = str(cords[0]) + " " + str(cords[1]) 
+                            destino = interagiveis[cords_string]["destino"]    
+                            trocar_sala(destino, interagiveis[cords_string]["inicio"])
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
