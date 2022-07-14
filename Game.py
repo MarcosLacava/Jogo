@@ -69,7 +69,7 @@ salas = {"DIRETORIA":True,
 with open(os.path.join("Mapas.json")) as m:
     mapas = json.load(m)
 
-mapaTeste = Mapa(copy.deepcopy(mapas["matriz_mapa"]), "main-room", interagiveis)
+mapaTeste = Mapa(copy.deepcopy(mapas["Main"]["matriz_mapa"]), "main-room", interagiveis)
 mapaSala1 = Mapa(copy.deepcopy(mapas["matriz_sala1"]), "main-room", interagiveis)
 mapaSala2 = Mapa(copy.deepcopy(mapas["matriz_sala2"]), "main-room", interagiveis)
 mapaSala3 = Mapa(copy.deepcopy(mapas["matriz_sala3"]), "main-room", interagiveis)
