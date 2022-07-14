@@ -153,7 +153,7 @@ while True:
                     click = True
 
 
-        # Imagens utilizadas na interface do menu principal e seus retângulos
+        # Imagem de fundo do menu
         bg = pygame.image.load((os.path.join('Sprites','menu','bg_main-menu.png'))).convert()
         tela.blit(bg,(0,0))
 
