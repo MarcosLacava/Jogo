@@ -5,7 +5,7 @@ import sys, pygame, pygame.freetype
 from Mapa import Mapa
 import copy
 import Text
-
+import json
 import Porta
 
 pygame.init()
@@ -25,18 +25,6 @@ clock = pygame.time.Clock()
 # Fontes
 title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
-
-
-# Função para desenhar texto na tela
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, color)
-    textobj[1].topleft = (x, y)
-    surface.blit(textobj[0],textobj[1])
-    if game:
-        font = fonte
-        color = preto
-
-        
 
 # Musicas
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -59,21 +47,7 @@ lista_sprites = pygame.sprite.Group()
 dialogo = Text.Text("Marcos é fodaasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd", title_font, (branco), tela, 25, 581)
 
 # Criação do Mapa
-matriz_mapa = [
-        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-        [2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], 
-        [2, 3 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2],
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-       ]
+
 
 interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
                 (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
@@ -88,7 +62,13 @@ salas = {"DIRETORIA":True,
          "SALA7":False,
          }
 
-mapaTeste = Mapa(copy.deepcopy(matriz_mapa), "main-room", interagiveis)
+with open(os.path.join("Mapas.json")) as m:
+    mapas = json.load(m)
+
+mapaTeste = Mapa(copy.deepcopy(mapas["matriz_mapa"]), "main-room", interagiveis)
+mapaSala1 = Mapa(copy.deepcopy(mapas["matriz_sala1"]), "main-room", interagiveis)
+mapaSala2 = Mapa(copy.deepcopy(mapas["matriz_sala2"]), "main-room", interagiveis)
+mapaSala3 = Mapa(copy.deepcopy(mapas["matriz_sala3"]), "main-room", interagiveis)
 
 # Criação do player
 player = Player((8,6))
@@ -187,5 +167,20 @@ while True:
                         trocar_sala(interagiveis[cords].destino)
 
         player.update()
+        renderização()
+
+    while salas["SALA1"]:
+        renderização()
+    while salas["SALA2"]:
+        renderização()
+    while salas["SALA3"]:
+        renderização()
+    while salas["SALA4"]:
+        renderização()
+    while salas["SALA5"]:
+        renderização()
+    while salas["SALA6"]:
+        renderização()
+    while salas["SALA7"]:
         renderização()
             
