@@ -20,7 +20,6 @@ preto = 1, 1, 1
 branco = 255, 255, 255
 
 # Game Clock
-tempo = 
 clock = pygame.time.Clock()
 
 # Fontes
