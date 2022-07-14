@@ -1,7 +1,7 @@
+from encodings import CodecRegistryError
 import pygame
 import pygame.display
 import copy
-import Porta
 
 from Spritesheet import Spritesheet
 
@@ -13,9 +13,11 @@ class Mapa():
         self.matriz_mapa = matriz
         self.largura = 13
 
-        for k in interagiveis.keys():
-            self.matriz_mapa[k[0]][k[1]] = interagiveis[k].tile
-
+        for k in interagiveis.keys(): # Adiciona cada interagível da lista no mapa
+            cordX, cordY = k.split()
+            cordX, cordY = int(cordX), int(cordY)
+            self.matriz_mapa[cordX][cordY] = interagiveis[k]["tile_num"]
+            
         # Cria cada tile do mapa
         for i in range(len(self.matriz_mapa)):
             for j in range(len(self.matriz_mapa[i])):
