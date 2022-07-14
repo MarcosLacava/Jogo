@@ -56,7 +56,7 @@ dialogo = Text.Text("Marcos é brabo", (branco), tela, 30, 634)
 interagiveis = {(5, 0) : Porta.Porta(cords=(5, 0), destino="SALA2", tile_num=9),
                 (5, 12) : Porta.Porta(cords=(5, 12), destino="SALA3", tile_num=9)}
 
-salas = {"DIRETORIA":True,
+salas = {"MAIN":True,
          "SALA1":False,
          "SALA2":False,
          "SALA3":False,
@@ -67,33 +67,29 @@ salas = {"DIRETORIA":True,
          }
 
 with open(os.path.join("Mapas.json")) as m:
-    mapas = json.load(m)
+    mapas = json.load(m) # Carrega os mapas no .json
 
-mapaTeste = Mapa(copy.deepcopy(mapas["Main"]["matriz_mapa"]), "main-room", interagiveis)
-mapaSala1 = Mapa(copy.deepcopy(mapas["matriz_sala1"]), "main-room", interagiveis)
-mapaSala2 = Mapa(copy.deepcopy(mapas["matriz_sala2"]), "main-room", interagiveis)
-mapaSala3 = Mapa(copy.deepcopy(mapas["matriz_sala3"]), "main-room", interagiveis)
+mapaAtual = Mapa(copy.deepcopy(mapas["MAIN"]["matriz"]) , mapas["MAIN"]["spritesheet"], interagiveis)
 
 # Criação do player
 player = Player((8,6))
-player.set_mapa(mapaTeste.gerar_colisoes(), interagiveis)
+player.set_mapa(mapaAtual.gerar_colisoes(), interagiveis)
 lista_sprites.add(player)
 
-
 click = False
-
 
 def trocar_sala(nova):
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
-    print(salas[nova])
-
+    global mapaAtual
+    mapaAtual = Mapa(copy.deepcopy(mapas[nova]["matriz"]) , mapas[nova]["spritesheet"], interagiveis)
+    print(salas)
 
 def renderização():
     # Faz todas as renderizações necessárias
     tela.fill(preto)
-    tela.blits(mapaTeste.quadrados)
+    tela.blits(mapaAtual.quadrados)
     fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
     lista_sprites.draw(tela)
@@ -102,6 +98,19 @@ def renderização():
     pygame.display.update()
     clock.tick(30)
   
+def event_loop():
+    # Lida com eventos (Botões, Fechamento)
+    for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                    if event.key == pygame.K_e and not player.interagindo:
+                        cords = player.proximo()
+                        if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
+                            trocar_sala(interagiveis[cords].destino)
 
 # Main Loop
 while True:
@@ -159,34 +168,50 @@ while True:
         clock.tick(30)
 
     # Game Loop
-    while salas['DIRETORIA']:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: 
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-                if event.key == pygame.K_e and not player.interagindo:
-                    cords = player.proximo()
-                    if mapaTeste.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
-                        trocar_sala(interagiveis[cords].destino)
-
+    while salas['MAIN']:
+        event_loop()
         player.update()
         renderização()
 
     while salas["SALA1"]:
+        
+        event_loop()
+        player.update()
         renderização()
+
     while salas["SALA2"]:
+
+        event_loop()
+        player.update()
         renderização()
-    while salas["SALA3"]:
+
+    while salas["SALA3"]:  
+
+        event_loop()
+        player.update()
         renderização()
+
     while salas["SALA4"]:
+
+        event_loop()
+        player.update()
         renderização()
+
     while salas["SALA5"]:
+
+        event_loop()
+        player.update()
         renderização()
+
     while salas["SALA6"]:
+
+        event_loop()
+        player.update()
         renderização()
+
     while salas["SALA7"]:
+
+        event_loop()
+        player.update()
         renderização()
             

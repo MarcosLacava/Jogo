@@ -20,7 +20,7 @@ class Mapa():
         for i in range(len(self.matriz_mapa)):
             for j in range(len(self.matriz_mapa[i])):
                     r = pygame.Rect([j*self.spritesheet.tileLen, i*self.spritesheet.tileLen], [self.spritesheet.tileLen, self.spritesheet.tileLen])
-                    self.quadrados.append((self.spritesheet.cortar_sprite(("sprite_main-room" + '{:0>2}'.format(str(self.matriz_mapa[i][j])) + ".png")), (j*self.spritesheet.tileLen, i*self.spritesheet.tileLen)))
+                    self.quadrados.append((self.spritesheet.cortar_sprite(("sprite_" + sprites + '{:0>2}'.format(str(self.matriz_mapa[i][j])) + ".png")), (j*self.spritesheet.tileLen, i*self.spritesheet.tileLen)))
 
     def gerar_colisoes(self):
         # Retorna uma matriz com 0 para tiles passáveis, 1 para tiles com colisão

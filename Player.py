@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
     
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()      
-        self.teclas()
+        self.teclas()   
         return super().update(*args, **kwargs)
 
     def set_mapa(self, colisao, interagiveis):
