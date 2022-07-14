@@ -152,10 +152,6 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_e:
-                    dialogo.text_box()
-                    print("Marcos é foda")
             
 
             # if event.type == pygame.VIDEORESIZE:
@@ -178,6 +174,7 @@ while True:
         fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
 
         lista_sprites.draw(tela)
-
+        dialogo.text_box()
+        
         pygame.display.update()
         clock.tick(30)
