@@ -419,6 +419,26 @@
 				"w": 64,
 				"h": 64
 			}
+		},
+		"sprite_desert-room21.png": {
+			"frame": {
+				"x": 1344,
+				"y": 0,
+				"w": 64,
+				"h": 64
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 64
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 64
+			}
 		}
 	},
 	"meta": {
@@ -427,7 +447,7 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 1344,
+			"w": 1408,
 			"h": 64
 		},
 		"scale": "1"
