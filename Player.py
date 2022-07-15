@@ -1,6 +1,4 @@
-import os
 import pygame
-import json
 from typing import Any
 from Spritesheet import Spritesheet
 
@@ -31,17 +29,15 @@ class Player(pygame.sprite.Sprite):
 
         # Variáveis dos sistemas:
         self.interagindo = False
-        self.carregando = False
+        self.carregando = -1
     
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()      
         self.teclas()  
         return super().update(*args, **kwargs)
 
-    def set_mapa(self, colisao, interagiveis):
+    def set_mapa(self, colisao):
         self.colisoes = colisao
-        self.interagiveis = interagiveis
-        #self.mapa_interacoes = interacao
 
     def set_pos(self, nova_pos):
         # Reposiciona o player no centro da tile indicada
@@ -51,7 +47,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_interagindo(self):
         return self.interagindo
-
+        
     def movimento(self):
         # Realiza o movimento do Player no mapa em tiles
         movimento = pygame.Vector2()
