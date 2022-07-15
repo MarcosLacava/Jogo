@@ -23,14 +23,15 @@ class Player(pygame.sprite.Sprite):
         self.andando = False
         self.velocidade = 6
 
-        #Variáveis da animação:
+        # Variáveis da animação:
         self.frame = 0
         self.frame_inicial = 0
         self.contagem_frame = 0
         self.frame_por_animacao = 6
 
-        #Variáveis dos sistemas:
+        # Variáveis dos sistemas:
         self.interagindo = False
+        self.carregando = False
     
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.rect.center += self.movimento()      

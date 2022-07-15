@@ -229,6 +229,11 @@ while True:
         renderização()
 
     while salas["SALA2"]:
+        if primeiro_loop["SALA2"]:
+
+            primeiro_loop["SALA2"] = False
+
+        
 
                            
         player.update()
@@ -279,7 +284,25 @@ while True:
         pygame.display.update()
         tempo += clock.tick(30)
 
-        event_loop()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_e and not player.interagindo:
+                    cords = player.proximo()
+                    if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
+                        # Converte as coordenadas para o formato da key
+                        cords_string = str(cords[0]) + " " + str(cords[1]) 
+                        destino = interagiveis[cords_string]["destino"]    
+                        trocar_sala(destino, interagiveis[cords_string]["inicio"])
+                    elif 12 <= mapaAtual.matriz_mapa[cords[0]][cords[1]] <= 28: # Flor
+                        if flor.idade == 10 and not flor.coletada:                          
+                            flor.coletar()
+                            mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                            puzzles[6] = True # Puzzle 6 resolvido
 
     while salas["SALA7"]:
         event_loop()
