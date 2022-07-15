@@ -57,3 +57,7 @@ class Mapa():
             matriz_colisao[i][self.largura-1] = 1
         
         return matriz_colisao
+
+
+    def mouse_collide(self):
+        pass
