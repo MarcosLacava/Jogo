@@ -1,3 +1,4 @@
+from audioop import cross
 from operator import truediv
 import os
 from pickletools import pyinteger_or_bool
@@ -11,6 +12,7 @@ from Mapa import Mapa
 import copy
 import Button
 import Flor
+import Gun
 import json
 
 pygame.init()
@@ -118,24 +120,34 @@ def renderização(update=True):
 def event_loop():
     # Lida com eventos (Botões, Fechamento)
     for event in pygame.event.get():
-                if event.type == pygame.QUIT: 
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-                    if event.key == pygame.K_e and not player.interagindo:
-                        cords = player.proximo()
-                        if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
-                            # Converte as coordenadas para o formato da key
-                            cords_string = str(cords[0]) + " " + str(cords[1]) 
-                            destino = interagiveis[cords_string]["destino"]    
-                            trocar_sala(destino, interagiveis[cords_string]["inicio"])
-                        elif 12 <= mapaAtual.matriz_mapa[cords[0]][cords[1]] <= 28: # Flor
-                            if flor.idade == 10 and not flor.coletada:                          
-                                flor.coletar()
-                                mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
-                                puzzles[6] = True # Puzzle 6 resolvido
+        if event.type == pygame.QUIT: 
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+            if event.key == pygame.K_e and not player.interagindo:
+                cords = player.proximo()
+                if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
+                    # Converte as coordenadas para o formato da key
+                    cords_string = str(cords[0]) + " " + str(cords[1]) 
+                    destino = interagiveis[cords_string]["destino"]    
+                    trocar_sala(destino, interagiveis[cords_string]["inicio"])
+
+                if salas["SALA3"]:
+                    if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 15:
+                        # Coloca a imagem da mira da arma na 
+                        global mira
+                        mira = True
+
+                if salas["SALA6"]:
+                    if 12 <= mapaAtual.matriz_mapa[cords[0]][cords[1]] <= 28: # Flor
+                        if flor.idade == 10 and not flor.coletada:                          
+                            flor.coletar()
+                            mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                            puzzles[6] = True # Puzzle 6 resolvido
+
+                        
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -288,10 +300,18 @@ while True:
         tempo += clock.tick(30)
 
     while salas["SALA3"]:  
-
+        
+        renderização(False)
         event_loop()
+
+        # Variáveis
+        gun = Gun.Gun()
+    
         player.update()
-        renderização()
+
+        pygame.display.update()
+        tempo += clock.tick(30)
+    
 
     while salas["SALA4"]:
 
