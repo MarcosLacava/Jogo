@@ -3,4 +3,4 @@ import Spritesheet
 
 class Pedestal:
     def __init__(self, spritesheet) -> None:
-        self.spritesheet = sprite
+        self.spritesheet = spritesheet
