@@ -48,8 +48,11 @@ primeiro_loop = copy.deepcopy(salas)
 puzzles = [False]*7
 
 # Lógica dos puzzles
-dialogos = [] # Todos
+dialogo = None # Todos
 estatuas = [] # 2
+solucao = [False]*3 # 2
+atirando = False # 3
+flor_coletada = False # 6
 
 # Cria a tela
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -74,14 +77,15 @@ sprites_player.add(player)
 sprites_mapa = pygame.sprite.Group()
 
 
-def trocar_sala(nova, posicao=(0,0)):
+def trocar_sala(nova, posicao=player.pos):
     # Troca o estado do jogo (salas/menus)
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
     primeiro_loop[nova] = True
+    global dialogos
     dialogos = []
-
+    sprites_mapa.empty()
     fade = pygame.Surface(size) # Objeto do fade
     fade.fill(preto)
 
@@ -138,16 +142,7 @@ def event_loop():
                     if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 15:
                         # Coloca a imagem da mira da arma na 
                         global mira
-                        mira = True
-
-                if salas["SALA6"]:
-                    if 12 <= mapaAtual.matriz_mapa[cords[0]][cords[1]] <= 28: # Flor
-                        if flor.idade == 10 and not flor.coletada:                          
-                            flor.coletar()
-                            mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
-                            puzzles[6] = True # Puzzle 6 resolvido
-
-                        
+                        mira = True                    
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -243,16 +238,21 @@ while True:
         
         if primeiro_loop["SALA2"]: 
             # Cria os objetos no primeiro loop do estado
-            for i, e in enumerate(interagiveis["estatuas"].values()):
-                sprite = mapaAtual.get_sprite(e["tile_num"])
+            if not puzzles[1]:
+                for i, e in enumerate(interagiveis["estatuas"].values()):
+                    sprite = mapaAtual.get_sprite(e["tile_num"])
 
-                mapaAtual.trocar_tile(e["pos"], e["tile_num"], trocar_sprite=False)
-                mapaAtual.trocar_colisao(e["pos"], colisao=True)
-                
-                estatuas.append(Estatua(e["pos"], e["tipo"], sprite))
-                sprites_mapa.add(estatuas[i])
+                    mapaAtual.trocar_tile(e["pos"], e["tile_num"], trocar_sprite=False)
+                    mapaAtual.trocar_colisao(e["pos"], colisao=True)
+                    
+                    estatuas.append(Estatua(e["pos"], e["tipo"], sprite))
+                    sprites_mapa.add(estatuas[i])
 
-            for c in interagiveis["colisoes"]:
+            else:   
+                for e in estatuas:
+                    sprites_mapa.add(e)
+
+            for c in interagiveis["colisoes"]: # Adiciona as colisões
                 mapaAtual.trocar_colisao(c, colisao=True)
 
             primeiro_loop["SALA2"] = False
@@ -272,47 +272,143 @@ while True:
                                 estatuas[player.carregando].descarregar(cords)
                                 mapaAtual.trocar_tile(cords, player.carregando + 23, trocar_sprite=False)
                                 mapaAtual.trocar_colisao(cords, colisao=True)
-                                player.carregando = -1
+                                player.set_carregando(-1)
+                            elif 26 <= tile <= 34 and not solucao[0]: # Deserto
+                                if player.carregando == 0:
+                                    solucao[0] = 2
+                                else:
+                                    solucao[0] = 1
+                                cords_central = (10, 2)
+                                estatuas[player.carregando].descarregar(cords_central)
+                                mapaAtual.trocar_tile(cords_central, player.carregando + 23, trocar_sprite=False)
+                                mapaAtual.trocar_colisao(cords_central, colisao=True)
+                                player.set_carregando(-1)
+                                
+                                soma = 0
+                                for i in solucao:
+                                    soma += i
+                                if soma == 6:
+                                    puzzles[1] = True
+                                    
+                            elif 44 <= tile <= 52 and not solucao[1]: # Castelo
+                                if player.carregando == 1:
+                                    solucao[1] = 2
+                                else:
+                                    solucao[1] = 1
+                                cords_central = (10, 6)
+                                estatuas[player.carregando].descarregar(cords_central)
+                                mapaAtual.trocar_tile(cords_central, player.carregando + 23, trocar_sprite=False)
+                                mapaAtual.trocar_colisao(cords_central, colisao=True)
+                                player.set_carregando(-1)
+
+                                soma = 0
+                                for i in solucao:
+                                    soma += i
+                                if soma == 6:
+                                    puzzles[1] = True
+                            elif 53 <= tile <= 61 and not solucao[2]: # Vulcão
+                                if player.carregando == 2:
+                                    solucao[2] = 2
+                                else:
+                                    solucao[2] = 1
+                                cords_central = (10, 10)
+                                estatuas[player.carregando].descarregar(cords_central)
+                                mapaAtual.trocar_tile(cords_central, player.carregando + 23, trocar_sprite=False)
+                                mapaAtual.trocar_colisao(cords_central, colisao=True)
+                                player.set_carregando(-1)
+
+                                soma = 0
+                                for i in solucao:
+                                    soma += i
+                                if soma == 6:
+                                    puzzles[1] = True
+
                         elif 23 <= tile <= 25: # Estátua de Dragão
                                 # Levantar a estátua
-                                player.carregando = tile-23
+                                player.set_carregando(tile-23)
                                 estatuas[player.carregando].carregar(player.rect)
                                 sprites_mapa.remove(estatuas[player.carregando])
                                 sprites_mapa.add(estatuas[player.carregando])
                                 mapaAtual.trocar_tile(cords, 0, trocar_sprite=False)
                                 mapaAtual.trocar_colisao(cords, colisao=False)
-                        elif 35 <= tile <= 44: # Dialogável
-                            Dialogo.Dialogo("Leva cada dragão a seu lar", tela)
+                        elif 35 <= tile <= 43: # Dialogável
+                            dialogo = Dialogo.Dialogo(["Leva cada dragao a seu lar"])
+                            player.interagindo = True
 
                         elif tile == 2: # Porta
                             # Converte as coordenadas para o formato da key
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
-                            destino = interagiveis[cords_string]["destino"]    
+                            destino = interagiveis[cords_string]["destino"]
 
+                            if not puzzles[1]:
+                                # Reinicia o puzzle ao sair da sala com ele não solucionado
+                                for i, e in enumerate(estatuas):
+                                    e = None
+                                    del e
+                                    solucao[i] = 0
+                                estatuas = []
+                                    
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+                            break
+                    elif event.key == pygame.K_e and player.interagindo:
+                        if not dialogo.passar_linha():
+                            dialogo = None
+                            player.interagindo = False
                     
         player.update()
         renderização(False)
         sprites_mapa.update()
         sprites_mapa.draw(tela)
 
+        if dialogo != None:
+            dialogo.draw(tela)
+
         pygame.display.update()
         tempo += clock.tick(30)
 
     while salas["SALA3"]:  
-        
+        if primeiro_loop["SALA3"]:
+            primeiro_loop["SALA3"] = False
         renderização(False)
-        event_loop()
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_e and not player.interagindo and not player.andando:
+                        cords = player.proximo()
+                        tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
+
+                        if 16 <= tile <= 17: # Pedestal
+                            if not flor.coletada:
+                                if flor.idade == 10:                          
+                                    flor.coletar()
+                                    flor_coletada = True
+                                    mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                                    puzzles[5] = True # Puzzle 6 resolvido
+                                else:
+                                    flor.coletar()
+                                    flor_coletada = True
+                                    mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                        
+                        elif tile == 15:
+                            player.interagindo = True
+
+
+                        elif tile == 12: # Porta
+                            # Converte as coordenadas para o formato da key
+                            cords_string = str(cords[0]) + " " + str(cords[1]) 
+                            destino = interagiveis[cords_string]["destino"]    
+
+                            trocar_sala(destino, interagiveis[cords_string]["inicio"])
 
         # Variáveis
-        gun = Gun.Gun()
     
         player.update()
 
         pygame.display.update()
         tempo += clock.tick(30)
     
-
     while salas["SALA4"]:
 
         event_loop()
@@ -327,7 +423,7 @@ while True:
 
     while salas["SALA6"]:
         if primeiro_loop["SALA6"]:
-            flor = Flor.Flor(tempo, puzzles[6])
+            flor = Flor.Flor(tempo, flor_coletada)
             primeiro_loop["SALA6"] = False
 
         player.update()
@@ -352,20 +448,25 @@ while True:
                         cords = player.proximo()
                         tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
 
-                        if player.carregando:
-                            if tile == 0:
-                                mapaAtual.trocar_tile(cords, player.carregando)
-                                player.carregando = 0
-                        elif 23 <= tile <= 25: # Estátua de Dragão
-                                mapaAtual.trocar_tile(cords, 0, remover_colisao=True)
-                                player.carregando = tile
+                        if 12 <= tile <= 28: # Flor
+                            if not flor.coletada:
+                                if flor.idade == 10:                          
+                                    flor.coletar()
+                                    flor_coletada = True
+                                    mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
+                                    puzzles[5] = True # Puzzle 6 resolvido
+                                else:
+                                    flor.coletar()
+                                    flor_coletada = True
+                                    mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
 
-                        elif tile == 2: # Porta
+                        elif tile == 12: # Porta
                             # Converte as coordenadas para o formato da key
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
                             destino = interagiveis[cords_string]["destino"]    
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+
     while salas["SALA7"]:
         event_loop()
         player.update()
