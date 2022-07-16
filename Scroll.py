@@ -34,7 +34,7 @@ class Scroll:
        # for word in range(10):
         
     
-    def write_scroll(self):
+    def write_scroll(self, pos):
         mx, my = pygame.mouse.get_pos()
         click = False
 
