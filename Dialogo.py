@@ -2,29 +2,44 @@ import pygame
 import os
 
 class Dialogo:
-    def __init__(self, texto, tela) -> None:
-        self.texto = texto
+    def __init__(self, texto) -> None:
+        self.textos = texto
         self.pronto = False
+        self.linha = 0
         # Fonte do text box
-        text_box_font = pygame.font.Font((os.path.join("Fonts", "yoster-island.regular.ttf")), 24)
-
+        self.text_box_font = pygame.font.Font((os.path.join("Fonts", "yoster-island.regular.ttf")), 24)
+        # Cores
+        self.cor_borda = (1,1,1,0.5)
+        self.cor = (255,255,255)
         # Caixa do texto.
-        box_rect = pygame.Rect(10, 614, 812, 208)
-        box_surf = pygame.draw.rect(tela, (1,1,1,0.5), box_rect)
-        box_stroke = pygame.draw.rect(tela, (255,255,255), box_rect, 5)
+        self.box_rect = pygame.Rect(10, 614, 812, 208)
+        self.largura_borda = 5
+
+        # self.box_surf = pygame.draw.rect(tela, self.cor_borda, self.box_rect)
+        # self.box_stroke = pygame.draw.rect(tela, self.cor, self.box_rect, self.largura_borda)
 
         # Conteúdo da caixa de texto.
-        text_content = text_box_font.render(texto, False, (255,255,255))
-        text_content_rect = text_content.get_rect(topleft = (30, 634))
-        tela.blit(text_content, text_content_rect)
+        
 
         #return box_surf, box_stroke
-    
+    def draw(self, tela):
+        # Desenha todo o diálogo
+
+        pygame.draw.rect(tela, self.cor_borda, self.box_rect)
+        pygame.draw.rect(tela, self.cor, self.box_rect, self.largura_borda)
+
+        text_content = self.text_box_font.render(self.textos[self.linha], False, (255,255,255))
+        text_content_rect = text_content.get_rect(topleft = (30, 634)) 
+
+        tela.blit(text_content, text_content_rect)
     def fechar():
         pass
 
-    def pular():
-        pass
+    def passar_linha(self):
+        self.linha += 1
+        if self.linha >= len(self.textos):
+            return False
+        return True
 
 class Dialogavel:
     def __init__(self, texto) -> None:

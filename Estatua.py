@@ -19,7 +19,7 @@ class Estatua(pygame.sprite.Sprite):
     def update(self, *args: Any, **kwargs: Any) -> None:
         if self.carregada:
             x, y = self.player_rect.center
-            self.rect.center = (x, y - 32)
+            self.rect.center = (x, y - self.tileLen)
 
         return super().update(*args, **kwargs)
 

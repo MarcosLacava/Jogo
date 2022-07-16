@@ -32,8 +32,9 @@ class Player(pygame.sprite.Sprite):
         self.carregando = -1
     
     def update(self, *args: Any, **kwargs: Any) -> None:
-        self.rect.center += self.movimento()      
-        self.teclas()  
+        self.rect.center += self.movimento()
+        if not self.interagindo:      
+            self.teclas()  
         return super().update(*args, **kwargs)
 
     def set_mapa(self, colisao):
@@ -58,13 +59,18 @@ class Player(pygame.sprite.Sprite):
 
             # Animação 
             self.contagem_frame += 1
-            if self.contagem_frame == self.frame_por_animacao: self.animar(); self.contagem_frame = 0
+            if self.contagem_frame == self.frame_por_animacao: 
+                self.animar()
+                self.contagem_frame = 0
 
             # Testa se o Player chegou na tile desejada
             if abs(self.rect.topleft[0] - self.pos[1]*self.spritesheet.tileLen) <= self.velocidade and abs(self.rect.topleft[1] - self.pos[0]*self.spritesheet.tileLen) <= self.velocidade:
                 self.rect.topleft = (self.pos[1]*self.spritesheet.tileLen, self.pos[0]*self.spritesheet.tileLen)    
                 self.andando = False
-                self.image = self.spritesheet.cortar_sprite("sprite_frach" + '{:0>2}'.format(str(self.frame_inicial-1)) + ".png")   
+                if self.carregando >= 0:
+                    self.image = self.get_sprite(self.frame_inicial+11)
+                else:
+                    self.image = self.get_sprite(self.frame_inicial-1)
                 self.teclas()
         return movimento
 
@@ -77,47 +83,87 @@ class Player(pygame.sprite.Sprite):
                 self.dir = (0,-1)
                 if self.pos[0] != 0 and self.colisoes[self.pos[0]-1][self.pos[1]] != 1:
                     self.pos = (self.pos[0]-1, self.pos[1])        
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach04.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(16)
+                    else:
+                        self.image = self.get_sprite(4)
                     self.frame_inicial = 4
                     self.andando = True
                 else:
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach03.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(15)
+                    else:
+                        self.image = self.get_sprite(3)
 
             elif teclas[pygame.K_s]:
                 self.dir = (0,1)
                 if self.pos[0] != len(self.colisoes)-1 and self.colisoes[self.pos[0]+1][self.pos[1]] != 1:
                     self.pos = (self.pos[0]+1, self.pos[1])
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach01.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(13)
+                    else:
+                        self.image = self.get_sprite(1)
                     self.frame_inicial = 1
                     self.andando = True
                 else:
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach00.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(12)
+                    else:
+                        self.image = self.get_sprite(0)
 
             elif teclas[pygame.K_a]:      
                 self.dir = (-1,0)
                 if self.pos[1] != 0 and self.colisoes[self.pos[0]][self.pos[1]-1] != 1:
                     self.pos = (self.pos[0], self.pos[1]-1)
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach10.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(22)
+                    else:
+                        self.image = self.get_sprite(10)
                     self.frame_inicial = 10
                     self.andando = True
                 else:
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach09.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(21)
+                    else:
+                        self.image = self.get_sprite(9)
 
             elif teclas[pygame.K_d]:
                 self.dir = (1,0)
                 if self.pos[1] != len(self.colisoes[0])-1 and self.colisoes[self.pos[0]][self.pos[1]+1] != 1: 
                     self.pos = (self.pos[0], self.pos[1]+1)
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach07.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(19)
+                    else:
+                        self.image = self.get_sprite(7)
                     self.frame_inicial = 7
                     self.andando = True
                 else:
-                    self.image = self.spritesheet.cortar_sprite("sprite_frach06.png")
+                    if self.carregando >= 0:
+                        self.image = self.get_sprite(18)
+                    else:
+                        self.image = self.get_sprite(6)
+
+    def set_carregando(self, carregando):
+        self.carregando = carregando
+        if carregando >= 0:
+            self.image = self.get_sprite(12)
+        else:
+            self.image = self.get_sprite(0)
+        self.dir = (0,1)
 
     def proximo(self):
         # Retorna as coordenadas da tile que o player está olhando
         return (self.pos[0] + self.dir[1], self.pos[1] + self.dir[0])
 
+    def get_sprite(self, num):
+        return self.spritesheet.cortar_sprite("sprite_frach" + '{:0>2}'.format(str(num)) + ".png")
+
     def animar(self):
         self.frame += 1
-        if self.frame == 2: self.frame = 0
-        self.image = self.spritesheet.cortar_sprite("sprite_frach" + '{:0>2}'.format(str(self.frame_inicial + self.frame)) + ".png")
+        if self.frame == 2: 
+            self.frame = 0
+
+        if self.carregando >= 0:
+            self.image = self.get_sprite(self.frame_inicial + self.frame + 12)
+        else:
+            self.image = self.get_sprite(self.frame_inicial + self.frame)
