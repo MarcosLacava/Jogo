@@ -13,7 +13,10 @@ import copy
 import Button
 import Flor
 import Gun
+import Scroll
 import json
+
+from Scroll import Scroll
 
 pygame.init()
 
@@ -48,8 +51,13 @@ primeiro_loop = copy.deepcopy(salas)
 puzzles = [False]*7
 
 # Lógica dos puzzles
+
+
 dialogos = [] # Todos
 estatuas = [] # 2
+
+open_scroll = False # Puzzle 07
+
 
 # Cria a tela
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -367,7 +375,46 @@ while True:
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
     while salas["SALA7"]:
-        event_loop()
+
+        if primeiro_loop["SALA7"]:
+            scroll = Scroll(tela)
+            primeiro_loop["SALA7"] = False
+
+        
+        renderização(False)
+
+        if open_scroll:
+            # tela.fill(branco)
+            scroll.open_scroll(tela)
+            player.interagindo = True
+            print(player.interagindo)
+
+
         player.update()
-        renderização()
-            
+
+        pygame.display.update()
+        tempo += clock.tick(30)
+
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_e and not player.interagindo and not player.andando:
+                        cords = player.proximo()
+                        tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
+
+                        if tile == 18:
+                            open_scroll = True
+                                                            
+
+                        elif tile == 11: # Porta
+                            # Converte as coordenadas para o formato da key
+                            cords_string = str(cords[0]) + " " + str(cords[1]) 
+                            destino = interagiveis[cords_string]["destino"]    
+
+                            trocar_sala(destino, interagiveis[cords_string]["inicio"])
+
+                    if (event.key == pygame.K_ESCAPE or event.key == pygame.K_e) and player.interagindo:
+                        open_scroll == scroll.open_scroll(False)
+                        player.interagindo = False
