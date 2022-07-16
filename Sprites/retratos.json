@@ -1,0 +1,135 @@
+{
+	"frames": {
+		"AVAREZA.png": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		},
+		"GULA.png": {
+			"frame": {
+				"x": 640,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		},
+		"INVEJA.png": {
+			"frame": {
+				"x": 1280,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		},
+		"IRA.png": {
+			"frame": {
+				"x": 1920,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		},
+		"LUXURIA.png": {
+			"frame": {
+				"x": 2560,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		},
+		"PREGUIÇA.png": {
+			"frame": {
+				"x": 3200,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 640,
+				"h": 640
+			},
+			"sourceSize": {
+				"w": 640,
+				"h": 640
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 3840,
+			"h": 640
+		},
+		"scale": "1"
+	}
+}
