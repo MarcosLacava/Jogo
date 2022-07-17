@@ -668,7 +668,8 @@ while True:
             scroll.write_scroll((mx,my), click)
             click = False
 
-            scroll.check_scroll()
+            if scroll.check_scroll():
+                mapaAtual.trocar_tile(interagiveis["Mesa"]["pos"], 19)
 
         player.update()
 
@@ -687,13 +688,18 @@ while True:
                         if tile == 18:
                             open_scroll = True
                                                             
+                        if tile == 20:
+                            if scroll.check_scroll():
+                                mapaAtual.trocar_tile(interagiveis["Espada"]["pos"], 21)
+                                puzzles[6] = True
 
-                        elif tile == 11: # Porta
+                        if tile == 11: # Porta
                             # Converte as coordenadas para o formato da key
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
                             destino = interagiveis[cords_string]["destino"]    
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+
 
                     elif (event.key == pygame.K_ESCAPE or event.key == pygame.K_e) and player.interagindo:
                         open_scroll = False

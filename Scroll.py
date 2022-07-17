@@ -81,8 +81,10 @@ class Scroll:
         if self.complete:
             for word in range(10):
                 if self.word_list_shuffled[word][0] == self.new_word_list[word][0]:
-                    print("Deu bom")
                     return True
                 else:
-                    print("Deu ruim")
                     return False
+
+    
+    def release_sword(self):
+        pass
