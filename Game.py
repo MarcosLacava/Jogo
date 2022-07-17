@@ -901,10 +901,10 @@ while True:
                         cords = player.proximo()
                         tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
 
-                        if tile == 18:
+                        if tile == 18: # Abre o pergaminho
                             open_scroll = True
                                                             
-                        if tile == 20:
+                        if tile == 20: # Retira a espada do pedestal, se o puzzle foi concluido com sucesso
                             if scroll.check_scroll():
                                 mapaAtual.trocar_tile(interagiveis["Espada"]["pos"], 21)
                                 puzzles[6] = True
