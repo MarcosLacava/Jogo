@@ -1,4 +1,5 @@
 import sys, os, pygame, pygame.freetype
+from tkinter import dialog
 import copy, json
 import Decoracao, Estatua, Flor, Scroll
 import Button, Dialogo, Mapa, Player, Spritesheet
@@ -383,14 +384,19 @@ while True:
                                 mapaAtual.trocar_tile(cords, 0, trocar_sprite=False)
                                 mapaAtual.trocar_colisao(cords, colisao=False)
                         elif 35 <= tile <= 43: # Dialogável
-                            lista_dialogo = ["Ha tres dragoes, um de cada lugar", 
-                            "Os do deserto sempre falam a verdade",
-                            "Os que residem no vulcao sao mentirosos",
-                            "Os dragoes do castelo tanto mentem quanto falam verdades",
-                            "O vermelho diz: O verde é do castelo",
-                            "O azul diz: o vermelho é do deserto",
-                            "O verde diz: eu sou do castelo",
-                            "Leve cada dragao a seu lar"]
+                            if puzzles[1]:
+                                # Diálogo do puzzle completo
+                                lista_dialogo = ["Cada dragao em seu lar"]
+                            else:
+                                # Dialogo do puzzle a ser feito
+                                lista_dialogo = ["Ha tres dragoes, um de cada lugar", 
+                                "Os do deserto sempre falam a verdade",
+                                "Os que residem no vulcao sao mentirosos",
+                                "Os dragoes do castelo tanto mentem quanto falam verdades",
+                                "O vermelho diz: O verde é do castelo",
+                                "O azul diz: o vermelho é do deserto",
+                                "O verde diz: eu sou do castelo",
+                                "Leve cada dragao a seu lar"]
                             dialogo = Dialogo.Dialogo(lista_dialogo)
                             player.interagindo = True
 
@@ -699,7 +705,7 @@ while True:
         if dialogo != None:
             dialogo.draw(tela)
 
-        if not puzzles[2] and pygame.key.get_pressed()[pygame.K_f]:
+        if not puzzles[3] and pygame.key.get_pressed()[pygame.K_f]:
             # Botao de reset do puzzle
             frames_reset_atual += 1
 
@@ -833,6 +839,10 @@ while True:
 
         if primeiro_loop["SALA7"]:
             scroll = Scroll.Scroll(tela)
+            if puzzles[6]:
+                mapaAtual.trocar_tile(interagiveis["Mesa"]["pos"], 19)
+                mapaAtual.trocar_tile(interagiveis["Espada"]["pos"], 21)
+
             primeiro_loop["SALA7"] = False
 
         tela.fill(preto)
@@ -875,7 +885,9 @@ while True:
                 dialogo = None
                 
                 # Reincia as varáveis do puzzle
+                mapaAtual.trocar_tile(interagiveis["Mesa"]["pos"], 18)
                 scroll = None
+                open_scroll = False
                 
                 for y in range(255, 0, -1): # Fade in
                     fade.set_alpha(y)
@@ -888,6 +900,9 @@ while True:
                     clock.tick(300)
         else:
             frames_reset_atual = 0
+
+        if dialogo != None:
+            dialogo.draw(tela)
 
         pygame.display.update()
         tempo += clock.tick(30)
@@ -908,6 +923,10 @@ while True:
                             if scroll.check_scroll():
                                 mapaAtual.trocar_tile(interagiveis["Espada"]["pos"], 21)
                                 puzzles[6] = True
+                            else:
+                                lista_dialogo = ["Este nao foi o juramento do cavaleiro"]
+                                dialogo = Dialogo.Dialogo(lista_dialogo)
+                                player.interagindo = True
 
                         if tile == 11: # Porta
                             # Converte as coordenadas para o formato da key
@@ -916,6 +935,10 @@ while True:
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
 
+                    elif event.key == pygame.K_e and player.interagindo and dialogo != None:
+                        if not dialogo.passar_linha():
+                            dialogo = None
+                            player.interagindo = False
 
                     elif (event.key == pygame.K_ESCAPE or event.key == pygame.K_e) and player.interagindo:
                         open_scroll = False
