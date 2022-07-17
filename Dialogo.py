@@ -36,21 +36,8 @@ class Dialogo:
         pass
 
     def passar_linha(self):
+        # Passa para a próxima string na lista do texto
         self.linha += 1
         if self.linha >= len(self.textos):
             return False
         return True
-
-class Dialogavel:
-    def __init__(self, texto) -> None:
-        self.texto = texto
-        self.aberto = False
-
-    def interagir(self, tela):
-        if self.aberto:
-            if self.dialogo.pronto:
-                self.dialogo.fechar()
-            else:
-                self.dialogo.pular()     
-        else:
-            self.dialogo = Dialogo(self.texto, tela)

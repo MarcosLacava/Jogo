@@ -11,7 +11,6 @@ class Player(pygame.sprite.Sprite):
         self.image = self.spritesheet.cortar_sprite("sprite_frach00.png")
         self.rect = self.image.get_rect()
         self.tileLen = 64
-        self.playerrect = pygame.Rect
 
         # Variáveis da posição e movimento:
         self.pos = pos_inicial
