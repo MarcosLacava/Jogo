@@ -564,16 +564,11 @@ while True:
                                 
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_e and not player.andando:
+                    if event.key == pygame.K_e and not player.interagindo and not player.andando:
                         cords = player.proximo()
                         tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
-
+                    
                         if 16 <= tile <= 17: # Pedestal
-                            if player.interagindo:
-                                # Fecha o retrato
-                                player.interagindo = False
-                                retrato = False
-                            else:
                                 # Abre o retrato
                                 cords_string = str(cords[0]) + " " + str(cords[1]) 
                                 sprite = spritesheet_retratos.cortar_sprite("retratos_" + interagiveis["pedestais"][cords_string]["pedestal"] + ".png")
@@ -581,16 +576,33 @@ while True:
                                 retrato = True
 
                         elif tile == 15 and not puzzles[2]: # Arma
-                            if atirando:
-                                # Guarda a arma
-                                player.interagindo = False
-                                atirando = False
-                                pygame.mouse.set_visible(True)
-                            else:
-                                # Pega a arma
-                                player.interagindo = True
-                                atirando = True
-                                pygame.mouse.set_visible(False)
+                            # Pega a arma
+                            player.interagindo = True
+                            atirando = True
+                            pygame.mouse.set_visible(False)
+                            
+                        elif tile == 22: # Mesa do Texto
+                            lista_dialogo = ["A começar pela Gula, nunca saciada,",
+                             "que segue predando a terra escassa",
+                             "Nao muito distante, no grande cofre de pedra,",
+                             "Sobre a Avareza cunhou o seu projetil",
+                             "A Luxuria o trai com um outro qualquer,",
+                             "Ali desvendado, o terceiro disparo selou a sentença",
+                             "Ao seu braco direito, fiel companheiro,",
+                             "Nao esperava o que a Inveja faria,",
+                             "o som do estampido findou parceria",
+                             "O bom filho a casa retorna,",
+                             "Atado por sangue, do laço com a Ira ele se desfez",
+                             "E sobre esse mesmo teto, a Preguiça doente, ",
+                             "para frente e para tras na cadeira balança",
+                             "Finalmente caida a ultima memoria,",
+                             "no fundo do inferno chegou o pecador",
+                             "E apesar dos pesares, ",
+                             "o vil Pistoleiro ainda carregava um tiro no tambor."
+
+                            ]
+                            dialogo = Dialogo.Dialogo(lista_dialogo)
+                            player.interagindo = True
 
                         elif tile == 11: # Porta
                             # Converte as coordenadas para o formato da key
@@ -598,6 +610,22 @@ while True:
                             destino = interagiveis[cords_string]["destino"]    
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+                    elif event.key == pygame.K_e and player.interagindo:
+                        # Guarda a arma
+                        if atirando:
+                            player.interagindo = False
+                            atirando = False
+                            pygame.mouse.set_visible(True)
+                        if retrato:
+                        # Fecha o retrato
+                            player.interagindo = False
+                            retrato = False
+
+                        if dialogo != None:
+                            # Fecha o diálogo
+                            if not dialogo.passar_linha():
+                                dialogo = None
+                                player.interagindo = False
 
         if atirando:
             # Lógica da arma (marcar alvos)
@@ -613,6 +641,8 @@ while True:
             image_box(sprite)
 
         player.update()
+        if dialogo != None:
+            dialogo.draw(tela)
 
         if not puzzles[2] and pygame.key.get_pressed()[pygame.K_f]:
             # Botao de reset do puzzle
@@ -631,6 +661,7 @@ while True:
                 player.set_carregando(-1)
                 player.interagindo = False
                 primeiro_loop["SALA3"] = True
+                dialogo = None
                 
                 # Reincia as varáveis do puzzle
                 indicadores = []

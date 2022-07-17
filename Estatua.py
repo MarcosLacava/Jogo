@@ -15,7 +15,7 @@ class Estatua(pygame.sprite.Sprite):
         self.carregada = False
         self.set_pos(pos)
         self.tipo = tipo
-
+        
     def update(self, *args: Any, **kwargs: Any) -> None:
         if self.carregada:
             x, y = self.player_rect.center

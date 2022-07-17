@@ -124,6 +124,7 @@
                           "9 9" : {"pedestal":"INVEJA", "tile_num":17}
                         },
                           "6 6":{"mesa":"ARMA", "tile_num":15},
+                          "6 8":{"mesa":"TEXTO", "tile_num":22},
                           "6 12" : {"destino":"MAIN", "inicio" : [6, 1], "tile_num":11}
                             }
         },
