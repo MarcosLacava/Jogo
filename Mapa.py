@@ -36,13 +36,16 @@ class Mapa():
         # Cria cada tile do mapa
         for i in range(len(self.matriz_mapa)):
             for j in range(len(self.matriz_mapa[i])):
-                    r = pygame.Rect([j*self.spritesheet.tileLen, i*self.spritesheet.tileLen], [self.spritesheet.tileLen, self.spritesheet.tileLen])
-                    self.quadrados.append((self.spritesheet.cortar_sprite(("sprite_" + sprites + '{:0>2}'.format(str(self.matriz_mapa[i][j])) + ".png")), (j*self.spritesheet.tileLen, i*self.spritesheet.tileLen)))
+                    sprite = self.get_sprite(str(self.matriz_mapa[i][j]))
+                    r = sprite.get_rect(topleft=(j*self.spritesheet.tileLen, i*self.spritesheet.tileLen))
+                    self.quadrados.append((sprite, r)) # Adiciona a tile na lista de tiles para dar Blit
 
     def trocar_tile(self, cords, nova, trocar_sprite = True):
         i, j = cords
         if trocar_sprite:
-            self.quadrados[i*13 + j] = (self.spritesheet.cortar_sprite(("sprite_" + self.sprites + '{:0>2}'.format(nova) + ".png")), (j*self.spritesheet.tileLen, i*self.spritesheet.tileLen))
+            sprite = self.get_sprite(nova)
+            r = sprite.get_rect(topleft=(j*self.spritesheet.tileLen, i*self.spritesheet.tileLen))
+            self.quadrados[i*13 + j] = (sprite, r)
         self.matriz_mapa[i][j] = nova
 
     def trocar_colisao(self, cords, colisao):

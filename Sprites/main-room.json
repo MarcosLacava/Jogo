@@ -400,7 +400,7 @@
 				"h": 64
 			}
 		},
-		"sprite_mesa-diretor0.png": {
+		"sprite_main-room20.png": {
 			"frame": {
 				"x": 1280,
 				"y": 0,
@@ -420,7 +420,7 @@
 				"h": 128
 			}
 		},
-		"sprite_tapete-main-room0.png": {
+		"sprite_main-room21.png": {
 			"frame": {
 				"x": 1472,
 				"y": 0,

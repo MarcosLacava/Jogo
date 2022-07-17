@@ -1,18 +1,7 @@
-from csv import QUOTE_ALL
-import os
-from Player import Player
-import sys, pygame, pygame.freetype
-from Estatua import Estatua
-import Dialogo
-from Mapa import Mapa
-import copy
-import Button
-import Flor
-import Scroll
-import json
-
-from Scroll import Scroll
-from Spritesheet import Spritesheet
+import sys, os, pygame, pygame.freetype
+import copy, json
+import Decoracao, Estatua, Flor, Scroll
+import Button, Dialogo, Mapa, Player, Spritesheet
 
 pygame.init()
 
@@ -35,7 +24,7 @@ title_font = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 64)
 fonte = pygame.freetype.SysFont(pygame.freetype.get_default_font(), 24)
 
 # Estados do jogo
-salas = {"MAIN":True,
+salas = {"MAIN": False,
          "SALA1":False,
          "SALA2":False,
          "SALA3":False,
@@ -43,20 +32,25 @@ salas = {"MAIN":True,
          "SALA5":False,
          "SALA6":False,
          "SALA7":False,
+         "END"  :False,
+         "MENU" :True,
          }
 primeiro_loop = copy.deepcopy(salas)
-puzzles = [False]*7
-main_menu = True
+
+puzzles = [True, False, False, False, True, False, False] # Guarda se um puzzle está completo ou não
+                                                          # Os não implementados começam como true
 
 # Lógica dos puzzles
 dialogo = None # Todos
 estatuas = [] # 2
 solucao = [False]*3 # 2
 atirando = False # 3
-spritesheet_retratos = Spritesheet("retratos") # 3
+spritesheet_retratos = Spritesheet.Spritesheet("retratos") # 3
+ordem_correta_salas = ["SALA6", "SALA2", "SALA3", "SALA7"] # 4
+ordem_atual_salas = [] # 4
+ordem_completa = False
 flor_coletada = False # 6
-
-open_scroll = False # Puzzle 07
+open_scroll = False # 7
 
 # Lógica dos botões
 frames_reset = 30 # Frames que deve segurar o botão para reiniciar o puzzle
@@ -67,12 +61,12 @@ with open(os.path.join("Mapas.json")) as m:
     mapas = json.load(m) # Carrega os mapas no .json
 
 interagiveis = mapas["MAIN"]["interagiveis"]
-mapaAtual = Mapa(copy.deepcopy(mapas["MAIN"]["matriz"]) , mapas["MAIN"]["spritesheet"], interagiveis)
+mapaAtual = Mapa.Mapa(copy.deepcopy(mapas["MAIN"]["matriz"]) , mapas["MAIN"]["spritesheet"], interagiveis)
 tileLen = 64
 
 # Criação do player
 posicao_inicial = (6,6)
-player = Player(posicao_inicial)
+player = Player.Player(posicao_inicial)
 player.set_mapa(mapaAtual.gerar_colisoes())
 
 # Sprites
@@ -83,8 +77,14 @@ crosshair_sprite = pygame.image.load(os.path.join("Sprites", "crosshair", "sprit
 alvo_sprite = pygame.image.load(os.path.join("Sprites", "crosshair", "sprite_alvo.png"))
 
 
-def trocar_sala(nova, posicao=player.pos):
+def trocar_sala(nova, posicao_player=False, fade_in=True, fade_out=True):
     # Troca o estado do jogo (salas/menus)
+
+    global mapaAtual
+    global posicao_inicial
+    global interagiveis
+    global dialogo
+
     for i in salas.keys():
         salas[i] = False
     salas[nova] = True
@@ -93,64 +93,36 @@ def trocar_sala(nova, posicao=player.pos):
     fade = pygame.Surface(size) # Objeto do fade
     fade.fill(preto)
 
-    for i in range(255): # Fade out
-        fade.set_alpha(i)
-        renderização(update=False)
-        tela.blit(fade, (0,0))
-        pygame.display.update()
-        clock.tick(255)
+    if fade_out:
+        for i in range(255): # Fade out
+            fade.set_alpha(i)
+            tela.fill(preto)
+            tela.blits(mapaAtual.quadrados)
 
-    global mapaAtual
-    global posicao_inicial
-    global interagiveis
-    global dialogo
+            sprites_player.draw(tela)
+            tela.blit(fade, (0,0))
+            pygame.display.update()
+            clock.tick(255)
+
     dialogo = None
     posicao_inicial = mapas[nova]["posicao_inicial"]
     interagiveis = mapas[nova]["interagiveis"]
-    mapaAtual = Mapa(copy.deepcopy(mapas[nova]["matriz"]) , mapas[nova]["spritesheet"], interagiveis)
+    mapaAtual = Mapa.Mapa(copy.deepcopy(mapas[nova]["matriz"]) , mapas[nova]["spritesheet"], interagiveis)
     player.set_mapa(mapaAtual.gerar_colisoes())
-    player.set_pos(posicao)
+    if posicao_player:
+        player.set_pos(posicao_player)
+    else:
+        player.set_pos(posicao_inicial)
 
-    for i in range(255, 0, -1): # Fade in
-        fade.set_alpha(i)
-        renderização(update=False)
-        tela.blit(fade, (0,0))
-        pygame.display.update()
-        clock.tick(255)
-
-def renderização(update=True):
-    # Faz todas as renderizações necessárias
-    tela.fill(preto)
-    tela.blits(mapaAtual.quadrados)
-
-    sprites_player.draw(tela)
-    if update:
-        pygame.display.update()
-        global tempo
-        tempo += clock.tick(30)
-  
-def event_loop():
-    # Lida com eventos (Botões, Fechamento)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: 
-            pygame.quit()
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
-            if event.key == pygame.K_e and not player.interagindo:
-                cords = player.proximo()
-                if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 9: # Porta
-                    # Converte as coordenadas para o formato da key
-                    cords_string = str(cords[0]) + " " + str(cords[1]) 
-                    destino = interagiveis[cords_string]["destino"]    
-                    trocar_sala(destino, interagiveis[cords_string]["inicio"])
-
-                if salas["SALA3"]:
-                    if mapaAtual.matriz_mapa[cords[0]][cords[1]] == 15:
-                        # Coloca a imagem da mira da arma na 
-                        global mira
-                        mira = True                    
+    if fade_in:
+        for i in range(255, 0, -1): # Fade in
+            fade.set_alpha(i)
+            tela.fill(preto)
+            tela.blits(mapaAtual.quadrados)
+            sprites_player.draw(tela)
+            tela.blit(fade, (0,0))
+            pygame.display.update()
+            clock.tick(255)              
 
 # Seção da música
 main_menu_theme = os.path.join('Music','alexander-nakarada-space-ambience.ogg')
@@ -163,7 +135,7 @@ def music(state, name):
     else:
         pygame.mixer.music.fadeout(1000)
 
-music(main_menu, main_menu_theme)
+music(salas["MENU"], main_menu_theme)
 
 
 def text_box(surface, text):
@@ -197,7 +169,7 @@ quit_button = Button.Button("quit_button", (416,516))
 # Main Loop
 while True:
     # Menu Loop
-    while main_menu:
+    while salas["MENU"]:
         # Event loop do menu principal
         click = False
         for event in pygame.event.get():
@@ -219,9 +191,8 @@ while True:
 
         # Condição para o botão de play ser acessado:
         if play_button.blit_button(tela) and click:
-            main_menu = False
-            music(main_menu, main_menu_theme)
-            game = True
+            trocar_sala("MAIN",fade_out=False)
+            music(salas["MENU"], main_menu_theme)
             break
 
         # Condição para o botão de quit ser acessado:
@@ -232,29 +203,89 @@ while True:
         pygame.display.update()
         clock.tick(30)
 
-    # Game Loop
+    # Game Loop 
+    while salas["END"]:
+        # Fim do jogo
+        pygame.quit()
+        sys.exit()
+
     while salas['MAIN']:
-        renderização(False)
+        if primeiro_loop["MAIN"]:
+            mesa = Decoracao.Decoracao(mapaAtual.get_sprite(interagiveis["Mesa"]["tile_num"]))
+            sprites_mapa.add(mesa)
+
+            cY, cX = interagiveis["Mesa"]["pos"]
+            mesa.rect.topleft = cY*tileLen, cX*tileLen
+            for x in range(3):
+                    # Cria colisão para cada uma das 3 tiles da mesa
+                    cords = cY, cX+x
+                    mapaAtual.trocar_tile(cords, interagiveis["Mesa"]["tile_num"])
+                    mapaAtual.trocar_colisao(cords, colisao=True)
+
+            primeiro_loop["MAIN"] = False      
+
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
+
+        sprites_mapa.draw(tela)
+        sprites_player.draw(tela)
         fonte.render_to(tela, [0, 0], str(player.movimento()), branco)
         fonte.render_to(tela, [0, 32], str(tempo), branco)
+
+        if dialogo != None:
+            dialogo.draw(tela)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_e and not player.interagindo and not player.andando:
+                    cords = player.proximo()
+                    tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
+
+                    if tile == 20:
+                        end = True
+                        for p in puzzles: # Verifica se o jogo foi completado
+                            if not p:
+                                end = False
+                        if end:
+                            trocar_sala("END", fade_in=False)
+                        else:
+                            player.interagindo = True
+                            lista_dialogo = ["Va em cada sala e resolva seus desafios", "So assim você sera liberado"]
+                            dialogo = Dialogo.Dialogo(lista_dialogo)
+                        
+                    elif 12 <= tile <= 18: # Porta
+                        # Converte as coordenadas para o formato da key
+                        cords_string = str(cords[0]) + " " + str(cords[1]) 
+                        destino = interagiveis[cords_string]["destino"]    
+
+                        if destino != "SALA4":
+                            ordem_atual_salas.append(destino) # Adiciona a nova sala à lista de salas entradas
+                        if ordem_atual_salas == ordem_correta_salas:
+                            # Completa o puzzle 4
+                            ordem_completa = True
+
+                        trocar_sala(destino)
+
+                elif event.key == pygame.K_e and player.interagindo:
+                        if not dialogo.passar_linha():
+                            dialogo = None
+                            player.interagindo = False
+        player.update()
+
         pygame.display.update()
         tempo += clock.tick(30)
 
-        event_loop()
-        player.update()
-
-    while salas["SALA1"]:
-        
-        event_loop()
-        player.update()
-        renderização()
-    
     while salas["SALA2"]:
         
         if primeiro_loop["SALA2"]: 
             # Cria os objetos no primeiro loop do estado
             if not puzzles[1]:
-                for i, e in enumerate(interagiveis["estatuas"].values()):
+                for y, e in enumerate(interagiveis["estatuas"].values()):
                     # Cria as estátuas
                     sprite = mapaAtual.get_sprite(e["tile_num"])
                     
@@ -262,9 +293,9 @@ while True:
                     mapaAtual.trocar_tile(e["pos"], e["tile_num"], trocar_sprite=False)
                     mapaAtual.trocar_colisao(e["pos"], colisao=True)
                     
-                    estatuas.append(Estatua(e["pos"], e["tipo"], sprite))
-                    estatuas[i].set_pos(e["pos"])
-                    sprites_mapa.add(estatuas[i])
+                    estatuas.append(Estatua.Estatua(e["pos"], e["tipo"], sprite))
+                    estatuas[y].set_pos(e["pos"])
+                    sprites_mapa.add(estatuas[y])
 
             else:   
                 for e in estatuas:
@@ -305,8 +336,8 @@ while True:
                                 player.set_carregando(-1)
                                 
                                 soma = 0
-                                for i in solucao:
-                                    soma += i
+                                for y in solucao:
+                                    soma += y
                                 if soma == 6:
                                     puzzles[1] = True
                                     
@@ -322,8 +353,8 @@ while True:
                                 player.set_carregando(-1)
 
                                 soma = 0
-                                for i in solucao:
-                                    soma += i
+                                for y in solucao:
+                                    soma += y
                                 if soma == 6:
                                     puzzles[1] = True
                             elif 53 <= tile <= 61 and not solucao[2]: # Vulcão
@@ -338,8 +369,8 @@ while True:
                                 player.set_carregando(-1)
 
                                 soma = 0
-                                for i in solucao:
-                                    soma += i
+                                for y in solucao:
+                                    soma += y
                                 if soma == 6:
                                     puzzles[1] = True
 
@@ -352,7 +383,15 @@ while True:
                                 mapaAtual.trocar_tile(cords, 0, trocar_sprite=False)
                                 mapaAtual.trocar_colisao(cords, colisao=False)
                         elif 35 <= tile <= 43: # Dialogável
-                            dialogo = Dialogo.Dialogo(["Leva cada dragao a seu lar"])
+                            lista_dialogo = ["Ha tres dragoes, um de cada lugar", 
+                            "Os do deserto sempre falam a verdade",
+                            "Os que residem no vulcao sao mentirosos",
+                            "Os dragoes do castelo tanto mentem quanto falam verdades",
+                            "O vermelho diz: O verde é do castelo",
+                            "O azul diz: o vermelho é do deserto",
+                            "O verde diz: eu sou do castelo",
+                            "Leve cada dragao a seu lar"]
+                            dialogo = Dialogo.Dialogo(lista_dialogo)
                             player.interagindo = True
 
                         elif tile == 2: # Porta
@@ -362,10 +401,10 @@ while True:
 
                             if not puzzles[1]:
                                 # Reinicia o puzzle ao sair da sala com ele não solucionado
-                                for i, e in enumerate(estatuas):
+                                for y, e in enumerate(estatuas):
                                     e = None
                                     del e
-                                    solucao[i] = 0
+                                    solucao[y] = 0
                                 estatuas = []
                                     
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
@@ -376,7 +415,10 @@ while True:
                             player.interagindo = False
                     
         player.update()
-        renderização(False)
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
+
+        sprites_player.draw(tela)
         sprites_mapa.update()
         sprites_mapa.draw(tela)
 
@@ -400,20 +442,25 @@ while True:
                 player.set_carregando(-1)
                 player.interagindo = False
                 primeiro_loop["SALA2"] = True
+                dialogo = None
 
                 # Reinicia as variáveis do puzzle
-                dialogo = None
-                for i in range(3):
+                for y in range(3):
                     sprites_mapa.remove(estatuas[0])
                     del estatuas[0]
                 estatuas = []
+                solucao.clear()
+                solucao = [0]*3
 
-                mapaAtual = Mapa(copy.deepcopy(mapas["SALA2"]["matriz"]) , mapas["SALA2"]["spritesheet"], interagiveis)
+                mapaAtual = Mapa.Mapa(copy.deepcopy(mapas["SALA2"]["matriz"]) , mapas["SALA2"]["spritesheet"], interagiveis)
                 player.set_mapa(mapaAtual.gerar_colisoes())
                 
-                for i in range(255, 0, -1): # Fade in
-                    fade.set_alpha(i)
-                    renderização(update=False)
+                for y in range(255, 0, -1): # Fade in
+                    fade.set_alpha(y)
+                    tela.fill(preto)
+                    tela.blits(mapaAtual.quadrados)
+
+                    sprites_player.draw(tela)
                     tela.blit(fade, (0,0))
                     pygame.display.update()
                     clock.tick(300)
@@ -456,7 +503,10 @@ while True:
             primeiro_loop["SALA3"] = False
 
         mx, my = pygame.mouse.get_pos()
-        renderização(False)
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
+
+        sprites_player.draw(tela)
 
         for event in pygame.event.get(): # Event loop
                 if event.type == pygame.QUIT: 
@@ -465,10 +515,10 @@ while True:
                 if atirando and event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1: # Marcar alvo
                         t = -1
-                        for i, x in enumerate(rect_pedestais):
+                        for y, x in enumerate(rect_pedestais):
                             # Verifica se o mouse está em cima de um pedestal
                             if x.collidepoint(mx, my): 
-                                t = i
+                                t = y
                                 break
 
                         if t >= 0 and t not in ordem_feita:
@@ -496,9 +546,12 @@ while True:
                             fade = pygame.Surface(size) # Objeto do fade
                             fade.fill(preto)
 
-                            for i in range(255, 0, -1): # Fade in
-                                fade.set_alpha(i)
-                                renderização(update=False)
+                            for y in range(255, 0, -1): # Fade in
+                                fade.set_alpha(y)
+                                tela.fill(preto)
+                                tela.blits(mapaAtual.quadrados)
+
+                                sprites_player.draw(tela)
                                 tela.blit(fade, (0,0))
                                 pygame.display.update()
                                 clock.tick(85)
@@ -546,8 +599,8 @@ while True:
             tela.blit(crosshair_sprite, crosshair_rect)
 
         if indicadores != None:
-            for i in indicadores:
-                tela.blit(i[0], i[1])
+            for y in indicadores:
+                tela.blit(y[0], y[1])
 
         if retrato:
             # Desenha a imagem do retrato
@@ -569,7 +622,7 @@ while True:
                 fade.fill(preto)
 
                 player.set_pos(posicao_inicial) # Teleporta o player para o começo da sala
-                player.set_carregando = -1
+                player.set_carregando(-1)
                 player.interagindo = False
                 primeiro_loop["SALA3"] = True
                 
@@ -578,9 +631,12 @@ while True:
                 ordem_feita = []
                 atirando = False
                 
-                for i in range(255, 0, -1): # Fade in
-                    fade.set_alpha(i)
-                    renderização(update=False)
+                for y in range(255, 0, -1): # Fade in
+                    fade.set_alpha(y)
+                    tela.fill(preto)
+                    tela.blits(mapaAtual.quadrados)
+
+                    sprites_player.draw(tela)
                     tela.blit(fade, (0,0))
                     pygame.display.update()
                     clock.tick(300)
@@ -591,16 +647,95 @@ while True:
         tempo += clock.tick(30)
     
     while salas["SALA4"]:
-
-        event_loop()
+        if primeiro_loop["SALA4"]:
+            if ordem_completa:
+                mapaAtual.trocar_tile([6,6], 13)
+            primeiro_loop["SALA4"] = False
+        
         player.update()
-        renderização()
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
 
-    while salas["SALA5"]:
+        sprites_player.draw(tela)
 
-        event_loop()
-        player.update()
-        renderização()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_e and not player.interagindo:
+                    cords = player.proximo()
+                    tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
+                    
+                    if tile == 13: # Finalizar puzzle
+                        puzzles[3] = True
+                        lista_dialogo = ["..."]
+
+                        dialogo = Dialogo.Dialogo(lista_dialogo) # Cria o dialogo do anjo
+                        player.interagindo = True
+
+                    elif tile == 12: # Dialogável
+                        lista_dialogo = ["A ordem do viajante importa", "Primeiro na floresta...", 
+                                                   "Depois pela caverna...", "Passando pelo deserto...", "Chegando no castelo", 
+                                                   "Para acabar na masmorra"]
+
+                        dialogo = Dialogo.Dialogo(lista_dialogo) # Cria o dialogo do anjo
+                        player.interagindo = True
+
+                    elif tile == 11: # Porta
+                        # Converte as coordenadas para o formato da key
+                        cords_string = str(cords[0]) + " " + str(cords[1]) 
+                        destino = interagiveis[cords_string]["destino"]    
+                        trocar_sala(destino, interagiveis[cords_string]["inicio"])
+
+                elif event.key == pygame.K_e and player.interagindo:
+                        if not dialogo.passar_linha():
+                            dialogo = None
+                            player.interagindo = False
+                
+        
+        if dialogo != None:
+            dialogo.draw(tela)
+
+        if not puzzles[2] and pygame.key.get_pressed()[pygame.K_f]:
+            # Botao de reset do puzzle
+            frames_reset_atual += 1
+
+            progresso = pygame.Rect(100,700,21*frames_reset_atual, 30)
+            pygame.draw.rect(tela, preto, progresso)
+
+            if frames_reset_atual >= frames_reset:
+                frames_reset_atual = 0
+                
+                fade = pygame.Surface(size) # Objeto do fade
+                fade.fill(preto)
+
+                player.set_pos(posicao_inicial) # Teleporta o player para o começo da sala
+                player.set_carregando(-1)
+                player.interagindo = False
+                primeiro_loop["SALA3"] = True
+                dialogo = None
+                
+                # Reincia as varáveis do puzzle
+                ordem_atual_salas = []
+                ordem_completa = False
+                
+                for y in range(255, 0, -1): # Fade in
+                    fade.set_alpha(y)
+                    tela.fill(preto)
+                    tela.blits(mapaAtual.quadrados)
+
+                    sprites_player.draw(tela)
+                    tela.blit(fade, (0,0))
+                    pygame.display.update()
+                    clock.tick(300)
+        else:
+            frames_reset_atual = 0
+                    
+        pygame.display.update()
+        tempo += clock.tick(30)
 
     while salas["SALA6"]:
         if primeiro_loop["SALA6"]:
@@ -608,13 +743,53 @@ while True:
             primeiro_loop["SALA6"] = False
 
         player.update()
-        renderização(False)
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
 
+        sprites_player.draw(tela)
         nova_tile = flor.update(tempo) # Adiciona o tempo á flor
 
         if nova_tile > 0:
             # Muda a tile a flor quando seu estágio é alterado
             mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], nova_tile)
+
+        if not puzzles[5] and pygame.key.get_pressed()[pygame.K_f]:
+            # Botao de reset do puzzle
+            frames_reset_atual += 1
+
+            progresso = pygame.Rect(100,700,21*frames_reset_atual, 30)
+            pygame.draw.rect(tela, preto, progresso)
+
+            if frames_reset_atual >= frames_reset:
+                frames_reset_atual = 0
+                
+                fade = pygame.Surface(size) # Objeto do fade
+                fade.fill(preto)
+
+                player.set_pos(posicao_inicial) # Teleporta o player para o começo da sala
+                player.set_carregando(-1)
+                player.interagindo = False
+                primeiro_loop["SALA6"] = True
+                dialogo = None
+                
+                # Reincia as varáveis do puzzle
+                flor_coletada = False
+                tempo = 0
+                
+                for y in range(255, 0, -1): # Fade in
+                    fade.set_alpha(y)
+                    tela.fill(preto)
+                    tela.blits(mapaAtual.quadrados)
+
+                    sprites_player.draw(tela)
+                    tela.blit(fade, (0,0))
+                    pygame.display.update()
+                    clock.tick(300)
+        else:
+            frames_reset_atual = 0
+
+        if dialogo != None:
+            dialogo.draw(tela)
 
         pygame.display.update()
         tempo += clock.tick(30)
@@ -627,8 +802,13 @@ while True:
                     if event.key == pygame.K_e and not player.interagindo and not player.andando:
                         cords = player.proximo()
                         tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
+                        
+                        if tile == 29: # Mesa
+                            lista_dialogo = ["A paciencia e uma virtude..."]
+                            dialogo = Dialogo.Dialogo(lista_dialogo)
+                            player.interagindo = True
 
-                        if 12 <= tile <= 28: # Flor
+                        elif 12 <= tile <= 28: # Flor
                             if not flor.coletada:
                                 if flor.idade == 10:    
                                     # Caso colete no tempo certo (Completa o puzzle)     
@@ -642,7 +822,7 @@ while True:
                                     flor_coletada = True
                                     mapaAtual.trocar_tile(interagiveis["Flor"]["pos"], 28)
 
-                        elif tile == 12: # Porta
+                        elif tile == 11: # Porta
                             # Converte as coordenadas para o formato da key
                             cords_string = str(cords[0]) + " " + str(cords[1]) 
                             destino = interagiveis[cords_string]["destino"]    
@@ -652,11 +832,13 @@ while True:
     while salas["SALA7"]:
 
         if primeiro_loop["SALA7"]:
-            scroll = Scroll(tela)
+            scroll = Scroll.Scroll(tela)
             primeiro_loop["SALA7"] = False
 
-        
-        renderização(False)
+        tela.fill(preto)
+        tela.blits(mapaAtual.quadrados)
+
+        sprites_player.draw(tela)
 
         if open_scroll:
             # tela.fill(branco)
@@ -666,6 +848,40 @@ while True:
 
 
         player.update()
+
+        if not puzzles[6] and pygame.key.get_pressed()[pygame.K_f]:
+            # Botao de reset do puzzle
+            frames_reset_atual += 1
+
+            progresso = pygame.Rect(100,700,21*frames_reset_atual, 30)
+            pygame.draw.rect(tela, preto, progresso)
+
+            if frames_reset_atual >= frames_reset:
+                frames_reset_atual = 0
+                
+                fade = pygame.Surface(size) # Objeto do fade
+                fade.fill(preto)
+
+                player.set_pos(posicao_inicial) # Teleporta o player para o começo da sala
+                player.set_carregando(-1)
+                player.interagindo = False
+                primeiro_loop["SALA7"] = True
+                dialogo = None
+                
+                # Reincia as varáveis do puzzle
+                scroll = None
+                
+                for y in range(255, 0, -1): # Fade in
+                    fade.set_alpha(y)
+                    tela.fill(preto)
+                    tela.blits(mapaAtual.quadrados)
+
+                    sprites_player.draw(tela)
+                    tela.blit(fade, (0,0))
+                    pygame.display.update()
+                    clock.tick(300)
+        else:
+            frames_reset_atual = 0
 
         pygame.display.update()
         tempo += clock.tick(30)

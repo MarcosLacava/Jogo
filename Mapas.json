@@ -2,7 +2,7 @@
     "MAIN" : {"matriz" : [
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
         [2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], 
-        [2, 3 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2], 
+        [2, 3 , 4, 4, 4, 4, 19, 4, 4, 4, 4, 5, 2], 
         [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2],
         [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
@@ -14,15 +14,14 @@
         [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
        ],
-       "posicao_inicial" : [6, 6],
+       "posicao_inicial" : [8, 6],
        "spritesheet" : "main-room",
-       "interagiveis" : {"2 0" : {"destino":"SALA1", "inicio" : [2, 11], "tile_num":9},
-                         "4 0" : {"destino":"SALA2", "inicio" : [4, 11], "tile_num":9},
-                         "6 0" : {"destino":"SALA3", "inicio" : [6, 11], "tile_num":9},
-                         "8 0" : {"destino":"SALA4", "inicio" : [8, 11], "tile_num":9},
-                         "10 0": {"destino":"SALA5", "inicio" : [10, 11], "tile_num":9},
-                         "4 12": {"destino":"SALA6", "inicio" : [4, 1], "tile_num":9},
-                         "8 12": {"destino":"SALA7", "inicio" : [8, 1], "tile_num":9}
+       "interagiveis" : {"12 6" : {"destino":"SALA2", "tile_num": 13},
+                         "6 0" : {"destino":"SALA3", "tile_num" : 14},
+                         "5 12" : {"destino":"SALA4", "tile_num": 15},
+                         "7 12": {"destino":"SALA6", "tile_num" : 17},
+                         "1 6": {"destino":"SALA7", "tile_num"  : 18},
+                         "Mesa" : {"pos" : [5, 5], "tile_num"   : 20}
                         }
         },
 
@@ -42,8 +41,8 @@
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
         "spritesheet" : "chess-room",
-        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9},
-                          "5 12" : {"destino":"SALA2", "inicio" : [8, 1], "tile_num":9}
+        "interagiveis" : {"5 0" : {"destino":"MAIN", "tile_num":9},
+                          "5 12" : {"destino":"SALA2", "tile_num":9}
                         }
         },
 
@@ -64,10 +63,10 @@
         ],
         "posicao_inicial" : [2, 10],
         "spritesheet" : "cave-room",
-        "interagiveis" :{   "1 10" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":2},
-                            "estatuas" : {"8 2" : {"tipo":"metalico", "pos" : [8, 2], "tile_num":23},
-                                          "8 5" : {"tipo":"cristalino", "pos" :[8, 5], "tile_num":24},
-                                          "8 8" : {"tipo":"cromatico", "pos" :[8, 8], "tile_num":25}
+        "interagiveis" :{   "1 10" : {"destino":"MAIN", "inicio" : [11, 6],"tile_num":2},
+                            "estatuas" : {"8 2" : {"tipo":"metalico", "pos" : [7, 7], "tile_num":23},
+                                          "8 5" : {"tipo":"cristalino", "pos" :[7, 5], "tile_num":24},
+                                          "8 8" : {"tipo":"cromatico", "pos" :[7, 6], "tile_num":25}
                                         },
                             "colisoes" : [  [3, 5],
                                             [3, 6],
@@ -125,7 +124,7 @@
                           "9 9" : {"pedestal":"INVEJA", "tile_num":17}
                         },
                           "6 6":{"mesa":"ARMA", "tile_num":15},
-                          "6 12" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":11}
+                          "6 12" : {"destino":"MAIN", "inicio" : [6, 1], "tile_num":11}
                             }
         },
     "SALA4" : {"matriz" : [
@@ -143,10 +142,11 @@
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
-        "posicao_inicial" : [5, 1],
+        "posicao_inicial" : [6, 1],
         "spritesheet" : "maze-room",
-        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9}
-                        }
+        "interagiveis" : {"6 0" : {"destino":"MAIN", "inicio" : [5, 11], "tile_num":11},
+                          "Anjo" : {"pos":[6, 6], "tile_num":12}
+    }
         },
     "SALA5" : {"matriz" : [
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -164,28 +164,28 @@
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
         "spritesheet" : "lab-room",
-        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9},
-                          "5 12" : {"destino":"SALA6", "inicio" : [8, 1], "tile_num":9}
+        "interagiveis" : {"5 0" : {"destino":"MAIN", "tile_num":9},
+                          "5 12" : {"destino":"SALA6", "tile_num":9}
                         }
         },
     "SALA6" : {"matriz" : [
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-        [2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], 
+        [2, 39 , 34, 1, 37, 1, 35, 39, 1, 36, 38, 1, 2], 
         [2, 3 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2],
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
+        [2, 0, 0, 0, 32, 32, 31, 32, 0, 30, 0, 6, 2], 
+        [2, 0, 0, 0, 0, 32, 32, 0, 0, 0, 32, 6, 2],
+        [2, 31, 0, 0, 0, 0, 0, 32, 33, 32, 31, 6, 2], 
+        [2, 0, 0, 0, 32, 32, 1, 0, 1, 0, 32, 6, 2], 
+        [2, 0, 0, 0, 30, 30, 0, 31, 32, 0, 0, 6, 2], 
+        [2, 0, 0, 0, 33, 0, 32,0, 0, 0, 0, 6, 2], 
+        [2, 32, 31, 0, 0, 33, 31, 32, 32, 0, 0, 6, 2], 
+        [2, 30, 32, 0, 0, 0, 0, 32, 30, 0, 0, 6, 2], 
+        [2, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
         "posicao_inicial" : [5, 1],
         "spritesheet" : "forest-room",
-        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9},
+        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [7, 11], "tile_num":11},
                           "Flor" : {"pos":[6, 6], "tile_num":12},
                           "Mesa" : {"pos":[6, 8], "tile_num":29}
                         }
@@ -205,9 +205,9 @@
         [2, 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 7 , 2], 
         [2, 2 , 2 , 2 , 2 , 2 , 11, 2 , 2 , 2 , 2 , 2 , 2]
         ],
-        "posicao_inicial" : [12, 7],
+        "posicao_inicial" : [11, 6],
         "spritesheet" : "castle-room",
-        "interagiveis" : {"12 6" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":11},
+        "interagiveis" : {"12 6" : {"destino":"MAIN", "inicio" : [2, 6], "tile_num":11},
                           "Mesa" : {"pos":[7, 6],"tile_num":18},
                           "Espada" : {"pos":[6, 6], "tile_num":20}}
         }
