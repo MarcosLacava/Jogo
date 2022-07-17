@@ -14,6 +14,7 @@
         [2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
        ],
+       "posicao_inicial" : [6, 6],
        "spritesheet" : "main-room",
        "interagiveis" : {"2 0" : {"destino":"SALA1", "inicio" : [2, 11], "tile_num":9},
                          "4 0" : {"destino":"SALA2", "inicio" : [4, 11], "tile_num":9},
@@ -61,6 +62,7 @@
         [3, 32, 33, 34, 0, 50, 51, 52, 0, 59, 60, 61, 3], 
         [3, 3 , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
         ],
+        "posicao_inicial" : [2, 10],
         "spritesheet" : "cave-room",
         "interagiveis" :{   "1 10" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":2},
                             "estatuas" : {"8 2" : {"tipo":"metalico", "pos" : [8, 2], "tile_num":23},
@@ -112,15 +114,18 @@
         [2, 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 7 , 2], 
         [2, 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2]
         ],
+        "posicao_inicial" : [6, 11],
         "spritesheet" : "desert-room",
-        "interagiveis" : {"6 12" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":12},
-                          "6 6":{"mesa":"ARMA", "tile_num":15},
+        "interagiveis" : {"pedestais" :{
                           "4 3" : {"pedestal":"GULA", "tile_num":16},
                           "3 6" : {"pedestal":"LUXURIA", "tile_num":16},
                           "4 9" : {"pedestal":"PREGUICA", "tile_num":17},
-                          "9 3" : {"pedestal":"AVARERZA", "tile_num":16},
+                          "9 3" : {"pedestal":"AVAREZA", "tile_num":16},
                           "10 6" : {"pedestal":"IRA", "tile_num":17},
                           "9 9" : {"pedestal":"INVEJA", "tile_num":17}
+                        },
+                          "6 6":{"mesa":"ARMA", "tile_num":15},
+                          "6 12" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":11}
                             }
         },
     "SALA4" : {"matriz" : [
@@ -138,9 +143,9 @@
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
+        "posicao_inicial" : [5, 1],
         "spritesheet" : "maze-room",
-        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9},
-                          "5 12" : {"destino":"SALA5", "inicio" : [8, 1], "tile_num":9}
+        "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9}
                         }
         },
     "SALA5" : {"matriz" : [
@@ -178,6 +183,7 @@
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2], 
         [2, 2 , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
+        "posicao_inicial" : [5, 1],
         "spritesheet" : "forest-room",
         "interagiveis" : {"5 0" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":9},
                           "Flor" : {"pos":[6, 6], "tile_num":12},
@@ -199,6 +205,7 @@
         [2, 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 7 , 2], 
         [2, 2 , 2 , 2 , 2 , 2 , 11, 2 , 2 , 2 , 2 , 2 , 2]
         ],
+        "posicao_inicial" : [12, 7],
         "spritesheet" : "castle-room",
         "interagiveis" : {"12 6" : {"destino":"MAIN", "inicio" : [8, 1], "tile_num":11},
                           "Mesa" : {"pos":[7, 6],"tile_num":18},

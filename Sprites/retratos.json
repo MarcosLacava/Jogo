@@ -1,6 +1,6 @@
 {
 	"frames": {
-		"AVAREZA.png": {
+		"retratos_AVAREZA.png": {
 			"frame": {
 				"x": 0,
 				"y": 0,
@@ -20,7 +20,7 @@
 				"h": 640
 			}
 		},
-		"GULA.png": {
+		"retratos_GULA.png": {
 			"frame": {
 				"x": 640,
 				"y": 0,
@@ -40,7 +40,7 @@
 				"h": 640
 			}
 		},
-		"INVEJA.png": {
+		"retratos_INVEJA.png": {
 			"frame": {
 				"x": 1280,
 				"y": 0,
@@ -60,7 +60,7 @@
 				"h": 640
 			}
 		},
-		"IRA.png": {
+		"retratos_IRA.png": {
 			"frame": {
 				"x": 1920,
 				"y": 0,
@@ -80,7 +80,7 @@
 				"h": 640
 			}
 		},
-		"LUXURIA.png": {
+		"retratos_LUXURIA.png": {
 			"frame": {
 				"x": 2560,
 				"y": 0,
@@ -100,7 +100,7 @@
 				"h": 640
 			}
 		},
-		"PREGUIÇA.png": {
+		"retratos_PREGUICA.png": {
 			"frame": {
 				"x": 3200,
 				"y": 0,
