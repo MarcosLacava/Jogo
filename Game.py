@@ -486,8 +486,13 @@ while True:
             # tela.fill(branco)
             scroll.open_scroll(tela)
             player.interagindo = True
-            print(player.interagindo)
 
+            mx, my = pygame.mouse.get_pos()
+
+            scroll.write_scroll((mx,my), click)
+            click = False
+
+            scroll.check_scroll()
 
         player.update()
 
@@ -514,6 +519,10 @@ while True:
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
 
-                    if (event.key == pygame.K_ESCAPE or event.key == pygame.K_e) and player.interagindo:
-                        open_scroll == scroll.open_scroll(False)
+                    elif (event.key == pygame.K_ESCAPE or event.key == pygame.K_e) and player.interagindo:
+                        open_scroll = False
                         player.interagindo = False
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        click = True
