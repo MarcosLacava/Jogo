@@ -884,6 +884,10 @@ while True:
                             destino = interagiveis[cords_string]["destino"]    
 
                             trocar_sala(destino, interagiveis[cords_string]["inicio"])
+                    elif event.key == pygame.K_e and player.interagindo:
+                        if not dialogo.passar_linha():
+                            dialogo = None
+                            player.interagindo = False
 
     while salas["SALA7"]:
 
