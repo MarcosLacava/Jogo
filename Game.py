@@ -146,6 +146,7 @@ dragon_sound = os.path.join("Sounds","dragon.ogg")
 flower_sound = os.path.join("Sounds","flower.ogg")
 gun_sound = os.path.join("Sounds","gun.ogg")
 sword_sound = os.path.join("Sounds","sword.ogg")
+angel_sound = os.path.join("Sounds","angel.ogg")
 
 def som(name):
     pygame.mixer.Sound(name).play()
@@ -723,6 +724,7 @@ while True:
                     tile = mapaAtual.matriz_mapa[cords[0]][cords[1]]
                     
                     if tile == 13: # Finalizar puzzle
+                        som(angel_sound)
                         puzzles[3] = True
                         lista_dialogo = ["..."]
 
