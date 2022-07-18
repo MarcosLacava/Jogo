@@ -80,11 +80,13 @@ alvo_sprite = pygame.image.load(os.path.join("Sprites", "crosshair", "sprite_alv
 
 def trocar_sala(nova, posicao_player=False, fade_in=True, fade_out=True):
     # Troca o estado do jogo (salas/menus)
+    som(door_sound)
 
     global mapaAtual
     global posicao_inicial
     global interagiveis
     global dialogo
+
 
     for i in salas.keys():
         salas[i] = False
@@ -137,6 +139,16 @@ def music(state, name):
         pygame.mixer.music.fadeout(1000)
 
 music(salas["MENU"], main_menu_theme)
+
+# Efeitos sonoros
+door_sound = os.path.join("Sounds","door.ogg")
+dragon_sound = os.path.join("Sounds","dragon.ogg")
+flower_sound = os.path.join("Sounds","flower.ogg")
+gun_sound = os.path.join("Sounds","gun.ogg")
+sword_sound = os.path.join("Sounds","sword.ogg")
+
+def som(name):
+    pygame.mixer.Sound(name).play()
 
 
 def text_box(surface, text):
@@ -271,6 +283,7 @@ while True:
                             ordem_completa = True
 
                         trocar_sala(destino)
+                        
 
                 elif event.key == pygame.K_e and player.interagindo:
                         if not dialogo.passar_linha():
@@ -340,6 +353,7 @@ while True:
                                 for y in solucao:
                                     soma += y
                                 if soma == 6:
+                                    som(dragon_sound)
                                     puzzles[1] = True
                                     
                             elif 44 <= tile <= 52 and not solucao[1]: # Castelo
@@ -357,6 +371,7 @@ while True:
                                 for y in solucao:
                                     soma += y
                                 if soma == 6:
+                                    som(dragon_sound)
                                     puzzles[1] = True
                             elif 53 <= tile <= 61 and not solucao[2]: # Vulcão
                                 if player.carregando == 2:
@@ -520,6 +535,7 @@ while True:
                     sys.exit()
                 if atirando and event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1: # Marcar alvo
+                        som(gun_sound)
                         t = -1
                         for y, x in enumerate(rect_pedestais):
                             # Verifica se o mouse está em cima de um pedestal
@@ -847,6 +863,7 @@ while True:
 
                         elif 12 <= tile <= 28: # Flor
                             if not flor.coletada:
+                                som(flower_sound)
                                 if flor.idade == 10:    
                                     # Caso colete no tempo certo (Completa o puzzle)     
                                     flor.coletar()
@@ -957,6 +974,7 @@ while True:
                         if tile == 20: # Retira a espada do pedestal, se o puzzle foi concluido com sucesso
                             if scroll.check_scroll():
                                 mapaAtual.trocar_tile(interagiveis["Espada"]["pos"], 21)
+                                som(sword_sound)
                                 puzzles[6] = True
                             else:
                                 lista_dialogo = ["Este nao foi o juramento do cavaleiro"]
